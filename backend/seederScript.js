@@ -1,0 +1,24 @@
+require("dotenv").config();
+const mongoose = require("mongoose");
+const productData = require("./data/products");
+const connectDB = require("./config/db");
+const Product = require("./model/productModel");
+
+connectDB();
+
+const importData = async () => {
+  try {
+    await Product.deleteMany({});
+
+    await Product.insertMany(productData);
+
+    console.log("hey");
+
+    process.exit();
+  } catch (error) {
+    console.error("Error with data import", error);
+    process.exit(1);
+  }
+};
+
+importData();
