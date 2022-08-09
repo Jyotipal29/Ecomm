@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { verifyTokenAndAuthorization } = require("./verifyToken");
+const {
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+} = require("./verifyToken");
 const {
   createProduct,
   updateProduct,
@@ -9,7 +12,7 @@ const {
   getAllProduct,
 } = require("../controllers/productController");
 
-router.post("/", verifyTokenAndAuthorization, createProduct);
+router.post("/", createProduct);
 router.put("/:id", verifyTokenAndAuthorization, updateProduct);
 router.delete("/:id", verifyTokenAndAuthorization, deleteProduct);
 router.get("/", getAllProduct);

@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
+import { api } from "../constants/api";
+import { addProduct } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -109,42 +116,72 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const location = useLocation();
+  const id = location.pathname.split("/")[3];
+  const [product, setProduct] = useState({});
+  const [qty, setQty] = useState(1);
+  const [color, setColor] = useState(" ");
+  const [size, setSize] = useState(" ");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await axios.get(`${api}/products/find/${id}`);
+        setProduct(res.data);
+      } catch (err) {}
+    };
+    getProduct();
+  }, [id]);
+  const handleQty = (type) => {
+    if (type === "dec") {
+      qty > 1 && setQty(qty - 1);
+    } else {
+      setQty(qty + 1);
+    }
+  };
+  const handleCart = () => {
+    dispatch(addProduct({ product, qty, price: product.price * qty }));
+  };
+  const cart = useSelector((state) => state.cart);
+  console.log(cart);
+
   return (
     <Container>
       <Announcement />
       <Navbar />
       <Wrapper>
         <ImgContainer>
-          <Image src="https://previews.123rf.com/images/subbotina/subbotina1508/subbotina150800017/43381145-teenage-fashion-stylish-model-girl-isolated-on-white-background.jpg " />
+          <Image src={product.img} />
         </ImgContainer>
         <InfoContainer>
-          <Title>jeans</Title>
-          <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit,
-            exercitationem.
-          </Desc>
-          <Price>200rs</Price>
+          <Title>{product.title}</Title>
+          <Desc>{product.desc}</Desc>
+          <Price>{product.price}</Price>
           <FilterContainer>
             <Filter>
-              <FilterTitle>Color</FilterTitle>
-
-              <FilterColor />
+              <FilterTitle>
+                {product.color?.map((c) => (
+                  <FilterColor color={c} />
+                ))}
+              </FilterTitle>
             </Filter>
             <Filter>
-              <FilterTitle>Size</FilterTitle>
-              <FilterColor />
+              <FilterTitle>size</FilterTitle>
               <FilterSize>
-                <FilterSizeOption>s</FilterSizeOption>
+                {product.size?.map((s) => (
+                  <FilterSizeOption>{s}</FilterSizeOption>
+                ))}
               </FilterSize>
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <RemoveIcon />
-              <Amount>0</Amount>
-              <AddIcon />
+              <RemoveIcon onClick={() => handleQty("dec")} />
+              <Amount>{qty}</Amount>
+              <AddIcon onClick={() => handleQty("inc")} />
             </AmountContainer>
-            <Button>ADD TO CART</Button>
+            <Button onClick={handleCart}>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

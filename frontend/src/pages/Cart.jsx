@@ -4,7 +4,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-
+import { useSelector } from "react-redux";
 const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
@@ -148,7 +148,7 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
-  //   const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart);
   //   const [stripeToken, setStripeToken] = useState(null);
   //   const history = useHistory();
 
@@ -189,32 +189,35 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://previews.123rf.com/images/subbotina/subbotina1601/subbotina160100032/50758762-fashion-model-girl-isolated-over-white-background.jpg " />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> jeans
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 12335
-                  </ProductId>
-                  <ProductColor />
-                  <ProductSize>
-                    <b>Size:</b> s
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <AddIcon />
-                  <ProductAmount>3</ProductAmount>
-                  <RemoveIcon />
-                </ProductAmountContainer>
-                <ProductPrice>1120</ProductPrice>
-              </PriceDetail>
-            </Product>
-
+            {cart.products.map((product) => (
+              <Product>
+                <ProductDetail>
+                  <Image src={product.imageUrl} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b>
+                      {product.name}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b>
+                      {product._id}
+                    </ProductId>
+                    <ProductColor />
+                    <ProductSize>
+                      <b>Size:</b> s
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <AddIcon />
+                    <ProductAmount>{product.qty}</ProductAmount>
+                    <RemoveIcon />
+                  </ProductAmountContainer>
+                  <ProductPrice>{product.price}</ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
             <Hr />
           </Info>
           {/* <Summary>

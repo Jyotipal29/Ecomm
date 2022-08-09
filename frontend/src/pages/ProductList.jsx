@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Announcement from "../components/Announcement";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import Products from "../components/Products";
 import Footer from "../components/Footer";
+import { useLocation } from "react-router";
 
 const Container = styled.div``;
 const Title = styled.h1`
@@ -29,15 +30,29 @@ const Select = styled.select`
 `;
 const Option = styled.option``;
 const ProductList = () => {
+  const location = useLocation();
+  const cat = location.pathname.split("/")[2];
+  const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState("Newest");
+  const handleFilters = (e) => {
+    const value = e.target.value;
+    setFilters({
+      ...filters,
+      [e.target.name]: value,
+    });
+  };
+  const handleSort = (e) => {
+    setSort(e.target.value);
+  };
   return (
     <Container>
       <Announcement />
       <Navbar />
-      <Title>Dresses</Title>
+      <Title>{cat}</Title>
       <FilterContainer>
         <Filter>
           <FilterText>Filter products :</FilterText>
-          <Select>
+          <Select name="color" onChange={handleFilters}>
             <Option disabled selected>
               color
             </Option>
@@ -46,26 +61,26 @@ const ProductList = () => {
             <Option>red</Option>
             <Option>blue</Option>
           </Select>
-          <Select>
+          <Select name="size" onChange={handleFilters}>
             <Option disabled selected>
               size
             </Option>
-            <Option>L</Option>
-            <Option>XL</Option>
-            <Option>XXL</Option>
-            <Option>XXXL</Option>
+            <Option>l</Option>
+            <Option>xl</Option>
+            <Option>xxl</Option>
+            <Option>xxxl</Option>
           </Select>
         </Filter>
         <Filter>
           <FilterText>sort products :</FilterText>
-          <Select>
-            <Option selected>Newest</Option>
-            <Option>Price(asc)</Option>
-            <Option>price (desc)</Option>
+          <Select onChange={handleSort}>
+            <Option value="newest">Newest</Option>
+            <Option value="asc">Price(asc)</Option>
+            <Option value="desc">price (desc)</Option>
           </Select>
         </Filter>
       </FilterContainer>
-      <Products />
+      <Products cat={cat} filters={filters} sort={sort} />
       <Footer />
     </Container>
   );

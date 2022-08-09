@@ -1,7 +1,12 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/userRedux";
+
 const Container = styled.div`
   height: 60px;
 `;
@@ -50,7 +55,27 @@ const Center = styled.div`
 const Logo = styled.h1`
   font-weight: bold;
 `;
+const Button = styled.button`
+  width: 20%;
+  border: none;
+  padding: 5px 10px;
+  background-color: teal;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 10px;
+`;
 const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.currentUser);
+  console.log(user);
+  const qty = useSelector((state) => state.cart.qty);
+  // console.log(qty);
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout());
+    navigate("/login");
+  };
   return (
     <Container>
       <Wrapper>
@@ -62,14 +87,48 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Logo>ShopCart</Logo>
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <Logo>ShopCart</Logo>
+          </Link>
         </Center>
 
         <Right>
-          <MenuItem>REGISTER</MenuItem>
-          <MenuItem>SIGN IN</MenuItem>
+          {user ? (
+            <>
+              <MenuItem>{user.user.username}</MenuItem>
+              <Button onClick={handleLogout}>logout</Button>
+            </>
+          ) : (
+            <>
+              <MenuItem>
+                <Link
+                  to="/register"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {" "}
+                  REGISTER
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link
+                  to="/login"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {" "}
+                  SIGN IN
+                </Link>
+              </MenuItem>
+            </>
+          )}
+
           <MenuItem>
-            <ShoppingCartIcon />
+            <Link
+              to="/cart"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {qty}
+              <ShoppingCartIcon />
+            </Link>
           </MenuItem>
         </Right>
       </Wrapper>
