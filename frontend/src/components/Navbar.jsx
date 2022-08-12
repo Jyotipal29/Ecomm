@@ -4,8 +4,13 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/userRedux";
+import { useAuth } from "../context/auth/authContext";
+import { logoutCall } from "../context/apiCalls";
+import { useCart } from "../context/cart/cartContext";
+import { useWish } from "../context/wishlist/wishContext";
 
 const Container = styled.div`
   height: 60px;
@@ -64,30 +69,45 @@ const Button = styled.button`
   cursor: pointer;
   margin-bottom: 10px;
 `;
-const Navbar = () => {
+const Navbar = ({ cat }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.currentUser);
-  console.log(user);
-  const qty = useSelector((state) => state.cart.qty);
-  // console.log(qty);
+  const {
+    state: { user },
+    dispatch,
+  } = useAuth();
+
+  // console.log("77", user);
+  const {
+    state: { cart },
+  } = useCart();
+  const {
+    state: { wish },
+  } = useWish();
+  // console.log(cart);
   const handleLogout = (e) => {
     e.preventDefault();
-    dispatch(logout());
+    logoutCall(dispatch);
     navigate("/login");
   };
   return (
     <Container>
       <Wrapper>
         <Left>
-          <Language>EN</Language>
+          <Language>
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              EN
+            </Link>
+          </Language>
           <SearchContainer>
             <Input />
             <SearchOutlinedIcon style={{ color: "gary", fontSize: "16px" }} />
           </SearchContainer>
         </Left>
         <Center>
-          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link
+            to={`/products/${cat}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <Logo>ShopCart</Logo>
           </Link>
         </Center>
@@ -95,7 +115,7 @@ const Navbar = () => {
         <Right>
           {user ? (
             <>
-              <MenuItem>{user.user.username}</MenuItem>
+              <MenuItem>{user.username}</MenuItem>
               <Button onClick={handleLogout}>logout</Button>
             </>
           ) : (
@@ -126,8 +146,17 @@ const Navbar = () => {
               to="/cart"
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              {qty}
+              {cart.length}
               <ShoppingCartIcon />
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link
+              to="/wishList"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {wish.length}
+              <FavoriteBorderOutlinedIcon />
             </Link>
           </MenuItem>
         </Right>

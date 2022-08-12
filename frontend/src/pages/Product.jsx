@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Navbar from "../components/Navbar";
@@ -11,7 +11,13 @@ import { api } from "../constants/api";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
+import { addToCart } from "../context/cart/cartAction";
+import { useCart } from "../context/cart/cartContext";
+import { useAuth } from "../context/auth/authContext";
+import { useWish } from "../context/wishlist/wishContext";
+import { useProduct } from "../context/product/productContext";
+// import axios from "axios";
+// import { api } from "../constants/api";
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -115,36 +121,108 @@ const Button = styled.button`
   }
 `;
 
+const Select = styled.select`
+  padding: 10px;
+  margin-right: 20px;
+`;
+const Option = styled.option``;
+
 const Product = () => {
   const location = useLocation();
-  const id = location.pathname.split("/")[3];
-  const [product, setProduct] = useState({});
+  const {
+    dispatch,
+    state: { cart },
+  } = useCart();
+  const { isAuth, token } = useAuth();
+  const {
+    state: { wish },
+    wishDispatch,
+  } = useWish();
+
+  const {
+    productState: { product },
+    productDispatch,
+  } = useProduct();
+  console.log("product", product);
+  const navigate = useNavigate();
+  const id = location.pathname.split("/")[2];
+  // const [product, setProduct] = useState({});
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(" ");
   const [size, setSize] = useState(" ");
-  const dispatch = useDispatch();
+
+  console.log(product);
 
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await axios.get(`${api}/products/find/${id}`);
-        setProduct(res.data);
-      } catch (err) {}
+        const { data } = await axios.get(`${api}/products/find/${id}`);
+        console.log("159", data);
+        productDispatch({ type: "GET_SINGLE_PRODUCT", payload: data });
+        localStorage.setItem("product", JSON.stringify(product));
+      } catch (err) {
+        console.log(err);
+      }
     };
     getProduct();
   }, [id]);
-  const handleQty = (type) => {
-    if (type === "dec") {
-      qty > 1 && setQty(qty - 1);
-    } else {
-      setQty(qty + 1);
+
+  const handleCart = async () => {
+    try {
+      if (isAuth) {
+        const { data } = await axios.get(`${api}/products/find/${id}`);
+        // console.log(res.data);
+        dispatch({
+          type: "ADD_CART",
+          payload: {
+            product: data._id,
+            name: data.name,
+            imageUrl: data.imageUrl,
+            price: data.price,
+            qty,
+            InStock: data.InStock,
+          },
+        });
+        localStorage.setItem("cart", JSON.stringify(cart));
+      } else {
+        navigate("/login");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
-  const handleCart = () => {
-    dispatch(addProduct({ product, qty, price: product.price * qty }));
+  const handleWish = async () => {
+    try {
+      if (isAuth) {
+        const { data } = await axios.get(`${api}/products/find/${id}`);
+        console.log("185", data);
+        wishDispatch({
+          type: "ADD_WISH",
+          payload: {
+            product: data,
+            name: data.name,
+            imageUrl: data.imageUrl,
+            price: data.price,
+            qty,
+            // InStock,
+          },
+        });
+        localStorage.setItem("wish", JSON.stringify(wish));
+      } else {
+        navigate("/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
-  const cart = useSelector((state) => state.cart);
-  console.log(cart);
+  const handleInc = (id) => {
+    console.log(id);
+    dispatch({ type: "INC_QTY", payload: id });
+    console.log(product.qty);
+  };
+  const handleDec = (id) => {
+    dispatch({ type: "DEC_QTY", payload: id });
+  };
 
   return (
     <Container>
@@ -152,13 +230,19 @@ const Product = () => {
       <Navbar />
       <Wrapper>
         <ImgContainer>
-          <Image src={product.img} />
+          <Image src={product.imageUrl} />
         </ImgContainer>
         <InfoContainer>
-          <Title>{product.title}</Title>
-          <Desc>{product.desc}</Desc>
+          <Title>{product.name}</Title>
+          <Desc>{product.description}</Desc>
           <Price>{product.price}</Price>
-          <FilterContainer>
+          {product.fastDelivery ? (
+            <Desc>Fast Delivery</Desc>
+          ) : (
+            <Desc>4 days Delivery</Desc>
+          )}
+
+          {/* <FilterContainer>
             <Filter>
               <FilterTitle>
                 {product.color?.map((c) => (
@@ -174,14 +258,18 @@ const Product = () => {
                 ))}
               </FilterSize>
             </Filter>
-          </FilterContainer>
+          </FilterContainer> */}
+          <AmountContainer>
+            {console.log(product.qty)}
+            <AddIcon onClick={() => handleInc(product._id)} />
+            <Amount>{product.qty}</Amount>
+            <RemoveIcon onClick={() => handleDec(product._id)} />
+          </AmountContainer>
           <AddContainer>
-            <AmountContainer>
-              <RemoveIcon onClick={() => handleQty("dec")} />
-              <Amount>{qty}</Amount>
-              <AddIcon onClick={() => handleQty("inc")} />
-            </AmountContainer>
-            <Button onClick={handleCart}>ADD TO CART</Button>
+            <Button onClick={handleCart}>
+              {!product.InStock ? "Out of stock" : " ADD TO CART"}
+            </Button>
+            <Button onClick={handleWish}>ADD TO wishlist</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import { useCart } from "../context/cart/cartContext";
 import { removeFromCart } from "../context/cart/cartAction";
 import { useAuth } from "../context/auth/authContext";
+import axios from "axios";
+import { api } from "../constants/api";
 import { useWish } from "../context/wishlist/wishContext";
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -151,13 +153,7 @@ const Button = styled.button`
   font-weight: 600;
 `;
 
-const Select = styled.select`
-  padding: 10px;
-  margin-right: 20px;
-`;
-const Option = styled.option``;
-
-const Cart = () => {
+const WishList = () => {
   const {
     state: { cart },
     dispatch,
@@ -166,34 +162,61 @@ const Cart = () => {
   const { isAuth, setIsAuth } = useAuth();
   const {
     state: { wish },
+    wishDispatch,
   } = useWish();
-  console.log("157", cart);
-
-  const removeHandle = (id) => {
-    console.log("168", id);
-
-    dispatch({ type: "REMOVE_FROM_CART", payload: id });
-    // localStorage.setItem("cart", JSON.stringify(cart));
+  console.log(wish);
+  console.log(wish);
+  const incHandle = (id) => {
+    dispatch({ type: "INC_QTY", payload: id });
+  };
+  const decHandle = (id) => {
+    dispatch({ type: "DEC_QTY", payload: id });
   };
 
+  // const handleCart = async (id) => {
+  //   try {
+  //     if (isAuth) {
+  //       const { data } = await axios.get(`${api}/products/find/${id}`);
+  //       // console.log(data);
+  //       dispatch({
+  //         type: "ADD_CART",
+  //         payload: {
+  //           product: data._id,
+  //           name: data.name,
+  //           imageUrl: data.imageUrl,
+  //           price: data.price,
+  //           // qty,
+  //         },
+  //       });
+  //       localStorage.setItem("cart", JSON.stringify(cart));
+  //     } else {
+  //       // navigate("/login");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  // const handleMoveToCart = (id) => {
+  //   wishDispatch({ type: "MOVE_TO_CART", payload: id });
+  // };
   return (
     <Container>
       <Announcement />
       <Navbar />
 
       <Wrapper>
-        <Title>YOUR BAG</Title>
+        <Title>YOUR WishList</Title>
         <Top>
           <TopButton>keep shoping</TopButton>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist ({wish.lenght})</TopText>
+            <TopText>Your cart ({cart.length})</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
           <Info>
-            {cart.map((product) => (
+            {wish.map((product) => (
               <Product>
                 <ProductDetail>
                   <Image src={product.imageUrl} />
@@ -210,31 +233,22 @@ const Cart = () => {
                     <ProductSize>
                       <b>Size:</b> s
                     </ProductSize>
-                    {console.log(product.qty)}
-                    <Select
-                      value={product.qty}
-                      onChange={(e) =>
-                        dispatch({
-                          type: "CHANGE_CART_QTY",
-                          payload: {
-                            id: product.product,
-                            qty: e.target.value,
-                          },
-                        })
-                      }
-                    >
-                      {[...Array(product.InStock).keys()].map((x) => (
-                        <Option key={x + 1}>{x + 1}</Option>
-                      ))}
-                    </Select>
-                    {/* <ProductAmount>{product.qty}</ProductAmount> */}
-                    <Button onClick={() => removeHandle(product.product)}>
+                    {/* <Button onClick={() => handleMoveToCart(product.product)}>
+                      MOVE TO CART
+                    </Button> */}
+
+                    {/* <Button onClick={() => removeHandle(product.product)}>
                       remove from CART
-                    </Button>
+                    </Button> */}
                   </Details>
                 </ProductDetail>
                 <PriceDetail>
-                  <ProductAmountContainer></ProductAmountContainer>
+                  <ProductAmountContainer>
+                    <AddIcon onClick={(id) => incHandle(product._id)} />
+                    <ProductAmount>{product.qty}</ProductAmount>
+                    <RemoveIcon onClick={(id) => decHandle(product._id)} />
+                  </ProductAmountContainer>
+                  <ProductPrice>{product.price}</ProductPrice>
                 </PriceDetail>
               </Product>
             ))}
@@ -278,4 +292,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default WishList;

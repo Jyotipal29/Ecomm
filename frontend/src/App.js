@@ -11,23 +11,27 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Home from "./pages/Home";
-import { useSelector } from "react-redux";
+import { useAuth } from "./context/auth/authContext";
+import WishList from "./pages/wishList";
+import PageNotFound from "./pages/PageNotFound";
 function App() {
-  const user = useSelector((state) => state.user.currentUser);
+  // const user = useSelector((state) => state.user.currentUser);
+  const {
+    state: { user },
+  } = useAuth();
+  console.log(user);
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={user ? <Home /> : <Navigate to="/login" />}
-          />
-          <Route path="/products/:category" element={<ProductList />} />
-          <Route path="/products/id/:id" element={<Product />} />
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/products" element={<ProductList />} />
+          <Route exact path="/products/:id" element={<Product />} />
           <Route exact path="/cart" element={<Cart />} />
+          <Route exact path="/wishList" element={<WishList />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
       ;

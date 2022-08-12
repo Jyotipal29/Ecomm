@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
+import { api } from "../constants/api";
 import styled from "styled-components";
 import { login } from "../redux/apiCalls";
 // import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
+import { useAuth } from "../context/auth/authContext";
+import { loginCall } from "../context/apiCalls";
 
 const Container = styled.div`
   width: 100vw;
@@ -69,16 +73,28 @@ const Error = styled.span`
 `;
 
 const Login = () => {
+  const { dispatch, isAuth, setIsAuth } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isFetching, error } = useSelector((state) => state.user);
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    login(dispatch, { username, password });
-    navigate("/");
+
+    try {
+      const res = await axios.post(`${api}/auth/login`, { username, password });
+      const user = res.data;
+      const token = user.token;
+      dispatch({ type: "LOGIN", payload: user });
+      localStorage.setItem("isAuth", true);
+      setIsAuth(true);
+
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", token);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <Container>
@@ -94,10 +110,8 @@ const Login = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button onClick={handleClick} disabled={isFetching}>
-            LOGIN
-          </Button>
-          {error && <Error>Something went wrong...</Error>}
+          <Button onClick={handleClick}>LOGIN</Button>
+          {/* {error && <Error>Something went wrong...</Error>} */}
           <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
           <Link>CREATE A NEW ACCOUNT</Link>
         </Form>

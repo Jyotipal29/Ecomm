@@ -1,5 +1,10 @@
 import styled from "styled-components";
-
+import axios from "axios";
+import { api } from "../constants/api";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useAuth } from "../context/auth/authContext";
+// import { registerCall } from "../context/apiCalls";
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -53,22 +58,61 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+  const { dispatch, isAuth, setIsAuth } = useAuth();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${api}/auth/register`, {
+        username,
+        email,
+        password,
+      });
+      const user = res.data;
+      const token = user.token;
+      console.log("77", user, token);
+      dispatch({ type: "REGISTER", payload: user });
+
+      if (res.data) {
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("isAuth", true);
+        localStorage.setItem("token", token);
+
+        setIsAuth("true");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    console.log("register done", { username, email, password });
+
+    navigate("/");
+  };
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input placeholder="name" />
-          <Input placeholder="last name" />
-          <Input placeholder="username" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirm password" />
+          <Input
+            placeholder="username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Input
+            placeholder="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            placeholder="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button>CREATE</Button>
+          <Button onClick={handleRegister}>CREATE</Button>
         </Form>
       </Wrapper>
     </Container>

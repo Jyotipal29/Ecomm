@@ -20,10 +20,21 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    qty: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
+
     imageUrl: {
       type: String,
       required: true,
     },
+    size: {
+      type: [String],
+      required: true,
+    },
+    fastDelivery: Boolean,
   },
   {
     timestamps: true,

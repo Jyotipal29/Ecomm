@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Products from "../components/Products";
 import Footer from "../components/Footer";
 import { useLocation } from "react-router";
+import { useProduct } from "../context/product/productContext";
 
 const Container = styled.div``;
 const Title = styled.h1`
@@ -29,58 +30,147 @@ const Select = styled.select`
   margin-right: 20px;
 `;
 const Option = styled.option``;
+const Button = styled.button`
+  padding: 15px;
+  border: 2px solid teal;
+  background-color: white;
+  cursor: pointer;
+  font-weight: 500;
+`;
 const ProductList = () => {
   const location = useLocation();
   const cat = location.pathname.split("/")[2];
-  const [filters, setFilters] = useState({});
-  const [sort, setSort] = useState("Newest");
-  const handleFilters = (e) => {
-    const value = e.target.value;
-    setFilters({
-      ...filters,
-      [e.target.name]: value,
-    });
-  };
-  const handleSort = (e) => {
-    setSort(e.target.value);
-  };
+  console.log("35", cat);
+  const {
+    productState: { byStock, byFastDelivery, sort },
+    productDispatch,
+  } = useProduct();
+  // const [filters, setFilters] = useState({});
+  // const [sort, setSort] = useState("Newest");
+  // const handleFilters = (e) => {
+  //   const value = e.target.value;
+  //   setFilters({
+  //     ...filters,
+  //     [e.target.name]: value,
+  //   });
+  // };
+  // const handleSort = (e) => {
+  //   setSort(e.target.value);
+  // };
   return (
     <Container>
       <Announcement />
-      <Navbar />
+      <Navbar cat={cat} />
       <Title>{cat}</Title>
       <FilterContainer>
         <Filter>
           <FilterText>Filter products :</FilterText>
-          <Select name="color" onChange={handleFilters}>
+          <span>
+            <input
+              inline
+              label="Ascending"
+              name="group1"
+              type="radio"
+              id={`inline-1`}
+              onChange={() =>
+                productDispatch({
+                  type: "SORT_BY_PRICE",
+                  payload: "lowToHigh",
+                })
+              }
+              checked={sort === "lowToHigh" ? true : false}
+            />
+            asc
+          </span>
+          <span>
+            <input
+              inline
+              label="Descending"
+              name="group1"
+              type="radio"
+              id={`inline-2`}
+              onChange={() =>
+                productDispatch({
+                  type: "SORT_BY_PRICE",
+                  payload: "highToLow",
+                })
+              }
+              checked={sort === "highToLow" ? true : false}
+            />
+            dsc
+          </span>
+          <span>
+            <input
+              inline
+              label="Include Out of Stock"
+              name="group1"
+              type="checkbox"
+              id={`inline-3`}
+              onChange={() =>
+                productDispatch({
+                  type: "FILTER_BY_STOCK",
+                })
+              }
+              checked={byStock}
+            />
+            stock
+          </span>
+          <span>
+            <input
+              inline
+              label="Fast Delivery Only"
+              name="group1"
+              type="checkbox"
+              id={`inline-4`}
+              onChange={() =>
+                productDispatch({
+                  type: "FILTER_BY_DELIVERY",
+                })
+              }
+              checked={byFastDelivery}
+            />
+            delevery
+          </span>
+          <Button
+            variant="light"
+            onClick={() =>
+              productDispatch({
+                type: "CLEAR_FILTERS",
+              })
+            }
+          >
+            Clear Filters
+          </Button>
+          {/* <Select name="color" onChange={handleFilters}>
             <Option disabled selected>
-              color
+              filter
             </Option>
-            <Option>white</Option>
-            <Option>black</Option>
+            <Option value="delivary">delivary</Option>
+             <Option></Option>
             <Option>red</Option>
-            <Option>blue</Option>
-          </Select>
-          <Select name="size" onChange={handleFilters}>
+            <Option>blue</Option> 
+          </Select>  */}
+          {/* <Select name="size" onChange={handleFilters}>
             <Option disabled selected>
               size
             </Option>
-            <Option>l</Option>
-            <Option>xl</Option>
-            <Option>xxl</Option>
-            <Option>xxxl</Option>
-          </Select>
+            <Option value="s">s</Option>
+            <Option value="m">m</Option>
+            <Option value="l">l</Option>
+            <Option value="xl">xl</Option>
+            <Option value="xxl">xxl</Option>
+          </Select> */}
         </Filter>
         <Filter>
-          <FilterText>sort products :</FilterText>
-          <Select onChange={handleSort}>
+          {/* <FilterText>sort products :</FilterText> */}
+          {/* <Select onChange={handleSort}>
             <Option value="newest">Newest</Option>
             <Option value="asc">Price(asc)</Option>
             <Option value="desc">price (desc)</Option>
-          </Select>
+          </Select> */}
         </Filter>
       </FilterContainer>
-      <Products cat={cat} filters={filters} sort={sort} />
+      <Products cat={cat} />
       <Footer />
     </Container>
   );

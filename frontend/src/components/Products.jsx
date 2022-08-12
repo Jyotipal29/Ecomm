@@ -4,6 +4,8 @@ import { popularProducts } from "../data";
 import Product from "./Product";
 import axios from "axios";
 import { api } from "../constants/api";
+import { getProducts } from "../context/product/productAction";
+import { useProduct } from "../context/product/productContext";
 const Container = styled.div`
   padding: 20px;
   display: flex;
@@ -11,57 +13,69 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const Products = ({ cat, filters, sort }) => {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+const Products = ({ cat }) => {
+  console.log("17", cat);
+  // const [products, setProducts] = useState([]);
+  const {
+    productState: { products, sort, byStock, byFastDelivery, searchQuery },
+    productDispatch,
+  } = useProduct();
+  console.log("23", products);
+  // const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const getProducts = async () => {
+    const getProducts = async (cat) => {
+      console.log("28", cat);
       try {
-        const res = await axios.get(
-          cat ? `${api}/products?category=${cat}` : `${api}/products`
+        const { data } = await axios.get(
+          // cat ? `${api}/products?category=${cat}` :
+          `${api}/products`
         );
-        // console.log(res.data);
-        setProducts(res.data);
-      } catch (err) {}
+        console.log("33", data);
+        productDispatch({ type: "GET_PRODUCTS", payload: data });
+        localStorage.setItem("products", JSON.stringify(products));
+      } catch (err) {
+        console.log(err);
+      }
     };
     getProducts();
   }, [cat]);
 
-  useEffect(() => {
-    cat &&
-      setFilteredProducts(
-        products.filter((item) =>
-          Object.entries(filters).every(([key, value]) =>
-            item[key].includes(value)
-          )
-        )
-      );
-  }, [products, cat, filters]);
+  console.log("41", cat);
 
-  useEffect(() => {
-    if (sort === "newest") {
-      setFilteredProducts((prev) =>
-        [...prev].sort((a, b) => a.createdAt - b.createdAt)
-      );
-    } else if (sort === "asc") {
-      setFilteredProducts((prev) =>
-        [...prev].sort((a, b) => a.price - b.price)
-      );
-    } else {
-      setFilteredProducts((prev) =>
-        [...prev].sort((a, b) => b.price - a.price)
-      );
-    }
-  }, [sort]);
+  // const transformProducts = () => {
+  //   // let sortedProducts = products;
+  //   if (sort) {
+  //     sortedProducts = sortedProducts.sort((a, b) =>
+  //       sort === "lowToHigh" ? a.price - b.price : b.price - a.price
+  //     );
+  //   }
+
+  //   if (!byStock) {
+  //     sortedProducts = sortedProducts.filter((prod) => prod.inStock);
+  //   }
+
+  //   if (byFastDelivery) {
+  //     sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
+  //   }
+  //   if (searchQuery) {
+  //     sortedProducts = sortedProducts.filter((prod) =>
+  //       prod.name.toLowerCase().includes(searchQuery)
+  //     );
+  //   }
+
+  //   return sortedProducts;
+  // };
 
   return (
     <Container>
-      {cat
-        ? filteredProducts.map((item) => <Product item={item} key={item.id} />)
-        : products
-            .slice(0, 8)
-            .map((item) => <Product item={item} key={item.id} />)}
+      {
+        // cat &&
+        products.map((item) => {
+          console.log(item);
+          return <Product item={item} key={item._id} />;
+        })
+      }
     </Container>
   );
 };

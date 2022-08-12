@@ -5,9 +5,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRoutes");
-const cartRouter = require("./routes/cartRouter");
 const productRouter = require("./routes/productRouter");
-const orderRouter = require("./routes/cartRouter");
 
 connectDB();
 
