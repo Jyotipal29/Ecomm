@@ -63,112 +63,68 @@ const ProductList = () => {
       <Navbar cat={cat} />
       <Title>{cat}</Title>
       <FilterContainer>
-        <Filter>
-          <FilterText>Filter products :</FilterText>
-          <span>
-            <input
-              inline
-              label="Ascending"
-              name="group1"
-              type="radio"
-              id={`inline-1`}
-              onChange={() =>
-                productDispatch({
-                  type: "SORT_BY_PRICE",
-                  payload: "lowToHigh",
-                })
-              }
-              checked={sort === "lowToHigh" ? true : false}
-            />
-            asc
-          </span>
-          <span>
-            <input
-              inline
-              label="Descending"
-              name="group1"
-              type="radio"
-              id={`inline-2`}
-              onChange={() =>
-                productDispatch({
-                  type: "SORT_BY_PRICE",
-                  payload: "highToLow",
-                })
-              }
-              checked={sort === "highToLow" ? true : false}
-            />
-            dsc
-          </span>
-          <span>
-            <input
-              inline
-              label="Include Out of Stock"
-              name="group1"
-              type="checkbox"
-              id={`inline-3`}
-              onChange={() =>
-                productDispatch({
-                  type: "FILTER_BY_STOCK",
-                })
-              }
-              checked={byStock}
-            />
-            stock
-          </span>
-          <span>
-            <input
-              inline
-              label="Fast Delivery Only"
-              name="group1"
-              type="checkbox"
-              id={`inline-4`}
-              onChange={() =>
-                productDispatch({
-                  type: "FILTER_BY_DELIVERY",
-                })
-              }
-              checked={byFastDelivery}
-            />
-            delevery
-          </span>
-          <Button
-            variant="light"
-            onClick={() =>
+        <FilterText>Filter products :</FilterText>
+        <span>
+          <input
+            inline
+            label="Ascending"
+            name="group1"
+            type="radio"
+            id={`inline-1`}
+            onChange={() =>
               productDispatch({
-                type: "CLEAR_FILTERS",
+                type: "SORT_BY_PRICE",
+                payload: "lowToHigh",
               })
             }
-          >
-            Clear Filters
-          </Button>
-          {/* <Select name="color" onChange={handleFilters}>
-            <Option disabled selected>
-              filter
-            </Option>
-            <Option value="delivary">delivary</Option>
-             <Option></Option>
-            <Option>red</Option>
-            <Option>blue</Option> 
-          </Select>  */}
-          {/* <Select name="size" onChange={handleFilters}>
-            <Option disabled selected>
-              size
-            </Option>
-            <Option value="s">s</Option>
-            <Option value="m">m</Option>
-            <Option value="l">l</Option>
-            <Option value="xl">xl</Option>
-            <Option value="xxl">xxl</Option>
-          </Select> */}
-        </Filter>
-        <Filter>
-          {/* <FilterText>sort products :</FilterText> */}
-          {/* <Select onChange={handleSort}>
-            <Option value="newest">Newest</Option>
-            <Option value="asc">Price(asc)</Option>
-            <Option value="desc">price (desc)</Option>
-          </Select> */}
-        </Filter>
+            checked={sort === "lowToHigh" ? true : false}
+          />
+          asc
+        </span>
+        <span>
+          <input
+            inline
+            label="Descending"
+            name="group1"
+            type="radio"
+            id={`inline-2`}
+            onChange={() =>
+              productDispatch({
+                type: "SORT_BY_PRICE",
+                payload: "highToLow",
+              })
+            }
+            checked={sort === "highToLow" ? true : false}
+          />
+          dsc
+        </span>
+
+        <span>
+          <input
+            inline
+            label="Fast Delivery Only"
+            name="group1"
+            type="checkbox"
+            id={`inline-4`}
+            onChange={() =>
+              productDispatch({
+                type: "FILTER_BY_DELIVERY",
+              })
+            }
+            checked={byFastDelivery}
+          />
+          delevery
+        </span>
+        <Button
+          variant="light"
+          onClick={() =>
+            productDispatch({
+              type: "CLEAR_FILTERS",
+            })
+          }
+        >
+          Clear Filters
+        </Button>
       </FilterContainer>
       <Products cat={cat} />
       <Footer />

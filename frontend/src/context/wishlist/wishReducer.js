@@ -16,11 +16,12 @@ const WishReducer = (state, action) => {
           wish: [...state.wish, item],
         };
       }
-    case "REMOVE_FROM_CART":
+    case "REMOVE_FROM_WISH":
       return {
         ...state,
-        wish: state.wish.filter((c) => c.product !== action.payload),
+        wish: state.wish.filter((c) => c.product._id !== action.payload),
       };
+
     // case "MOVE_TO_CART":
     //   return {
     //     ...state,

@@ -14,26 +14,17 @@ const Container = styled.div`
 `;
 
 const Products = ({ cat }) => {
-  console.log("17", cat);
-  // const [products, setProducts] = useState([]);
   const {
-    productState: { products, sort, byStock, byFastDelivery, searchQuery },
+    productState: { products, sort, byFastDelivery, searchQuery },
     productDispatch,
   } = useProduct();
-  console.log("23", products);
-  // const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     const getProducts = async (cat) => {
       console.log("28", cat);
       try {
-        const { data } = await axios.get(
-          // cat ? `${api}/products?category=${cat}` :
-          `${api}/products`
-        );
-        console.log("33", data);
+        const { data } = await axios.get(`${api}/products`);
         productDispatch({ type: "GET_PRODUCTS", payload: data });
-        localStorage.setItem("products", JSON.stringify(products));
       } catch (err) {
         console.log(err);
       }
@@ -41,41 +32,33 @@ const Products = ({ cat }) => {
     getProducts();
   }, [cat]);
 
-  console.log("41", cat);
+  const transformProducts = () => {
+    let sortedProducts = products;
+    if (sort) {
+      sortedProducts = sortedProducts.sort((a, b) =>
+        sort === "lowToHigh" ? a.price - b.price : b.price - a.price
+      );
+    }
 
-  // const transformProducts = () => {
-  //   // let sortedProducts = products;
-  //   if (sort) {
-  //     sortedProducts = sortedProducts.sort((a, b) =>
-  //       sort === "lowToHigh" ? a.price - b.price : b.price - a.price
-  //     );
-  //   }
+    if (byFastDelivery) {
+      sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
+    }
+    if (searchQuery) {
+      sortedProducts = sortedProducts.filter((prod) =>
+        prod.name.toLowerCase().includes(searchQuery)
+      );
+    }
 
-  //   if (!byStock) {
-  //     sortedProducts = sortedProducts.filter((prod) => prod.inStock);
-  //   }
-
-  //   if (byFastDelivery) {
-  //     sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
-  //   }
-  //   if (searchQuery) {
-  //     sortedProducts = sortedProducts.filter((prod) =>
-  //       prod.name.toLowerCase().includes(searchQuery)
-  //     );
-  //   }
-
-  //   return sortedProducts;
-  // };
+    return sortedProducts;
+  };
 
   return (
     <Container>
-      {
-        // cat &&
-        products.map((item) => {
+      {transformProducts() &&
+        transformProducts().map((item) => {
           console.log(item);
           return <Product item={item} key={item._id} />;
-        })
-      }
+        })}
     </Container>
   );
 };

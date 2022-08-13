@@ -53,18 +53,22 @@ const Icon = styled.div`
 `;
 
 const Product = ({ item }) => {
-  console.log(item._id);
+  console.log("56", item);
   return (
     <Container>
       {/* <Circle /> */}
-      <Image src={item.imageUrl} />
-      <Info>
-        <Icon>
-          <Link to={`/products/${item._id}`}>
-            <SearchOutlinedIcon />
-          </Link>
-        </Icon>
-      </Info>
+      {item && (
+        <>
+          <Image src={item.imageUrl} />
+          <Info>
+            <Icon>
+              <Link to={`/products/${item._id}`}>
+                <SearchOutlinedIcon />
+              </Link>
+            </Icon>
+          </Info>
+        </>
+      )}
     </Container>
   );
 };

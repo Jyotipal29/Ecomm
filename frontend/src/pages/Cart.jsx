@@ -9,6 +9,8 @@ import { useCart } from "../context/cart/cartContext";
 import { removeFromCart } from "../context/cart/cartAction";
 import { useAuth } from "../context/auth/authContext";
 import { useWish } from "../context/wishlist/wishContext";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
@@ -158,22 +160,34 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const Cart = () => {
+  const navigate = useNavigate();
   const {
     state: { cart },
     dispatch,
   } = useCart();
-
+  console.log(cart);
   const { isAuth, setIsAuth } = useAuth();
   const {
     state: { wish },
   } = useWish();
-  console.log("157", cart);
+  const [total, setTotal] = useState();
+
+  useEffect(() => {
+    setTotal(
+      cart.reduce((acc, curr) => acc + Number(curr.price) * curr.qty, 0)
+    );
+  }, [cart]);
+  // console.log("157", wish);
 
   const removeHandle = (id) => {
-    console.log("168", id);
+    // console.log("168", id);
 
     dispatch({ type: "REMOVE_FROM_CART", payload: id });
-    // localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
+  };
+
+  const checkoutHandler = () => {
+    navigate("/address");
   };
 
   return (
@@ -184,10 +198,17 @@ const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>keep shoping</TopButton>
+          <TopButton>
+            <Link
+              to="/products"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              keep shoping
+            </Link>
+          </TopButton>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist ({wish.lenght})</TopText>
+            <TopText>Your Wishlist ({wish && wish.length})</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
@@ -204,13 +225,13 @@ const Cart = () => {
                     </ProductName>
                     <ProductId>
                       <b>ID:</b>
-                      {product._id}
+                      {product.product}
                     </ProductId>
                     <ProductColor />
                     <ProductSize>
                       <b>Size:</b> s
                     </ProductSize>
-                    {console.log(product.qty)}
+                    {console.log(product, "product")}
                     <Select
                       value={product.qty}
                       onChange={(e) =>
@@ -234,17 +255,20 @@ const Cart = () => {
                   </Details>
                 </ProductDetail>
                 <PriceDetail>
-                  <ProductAmountContainer></ProductAmountContainer>
+                  <ProductAmountContainer>
+                    ${product.price * product.qty}
+                    <ProductPrice></ProductPrice>
+                  </ProductAmountContainer>
                 </PriceDetail>
               </Product>
             ))}
             <Hr />
           </Info>
-          {/* <Summary>
+          <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-            <SummaryItem>
+            {/* <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
+              <SummaryItemPrice>$ {total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -253,12 +277,12 @@ const Cart = () => {
             <SummaryItem>
               <SummaryItemText>Shipping Discount</SummaryItemText>
               <SummaryItemPrice>$ -5.90</SummaryItemPrice>
-            </SummaryItem>
+            </SummaryItem> */}
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$5</SummaryItemPrice>
+              <SummaryItemPrice>${total}</SummaryItemPrice>
             </SummaryItem>
-            <StripeCheckout
+            {/* <StripeCheckout
               name="Lama Shop"
               image="https://avatars.githubusercontent.com/u/1486366?v=4"
               billingAddress
@@ -267,10 +291,10 @@ const Cart = () => {
               amount={cart.total * 100}
               token={onToken}
               stripeKey={KEY}
-            >
-              <Button>CHECKOUT NOW</Button>
-            </StripeCheckout>
-          </Summary> */}
+            > */}
+            <Button onClick={checkoutHandler}>CHECKOUT NOW</Button>
+            {/* </StripeCheckout> */}
+          </Summary>
         </Bottom>
       </Wrapper>
       <Footer />

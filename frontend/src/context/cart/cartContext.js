@@ -10,11 +10,20 @@ export const CartProvider = ({ children }) => {
   const {
     state: { user },
   } = useAuth();
-  const cartFromLocalStorage = JSON.parse(localStorage.getItem("cart") || []);
+  
   const [state, dispatch] = useReducer(CartReducer, {
-    cart: cartFromLocalStorage,
+    cart: JSON.parse(localStorage.getItem("cart") || []),
+    shippingAddress: JSON.parse(localStorage.getItem("shippingAddress") || {}),
   });
 
+
+
+
+
+
+
+
+  
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(state.cart));
   }, [state.cart, user]);

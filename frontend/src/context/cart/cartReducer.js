@@ -22,6 +22,14 @@ const CartReducer = (state, action) => {
         ...state,
         cart: state.cart.filter((c) => c.product !== action.payload),
       };
+    case "SAVE_ADDRESS":
+      return {
+        ...state,
+        shippingAddress: {
+          ...state.shippingAddress,
+          shippingAddress: action.payload,
+        },
+      };
     case "INC_QTY":
       return {
         ...state,

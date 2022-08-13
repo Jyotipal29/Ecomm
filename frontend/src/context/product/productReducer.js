@@ -10,14 +10,16 @@ const ProductReducer = (productState, action) => {
       };
     case "SORT_BY_PRICE":
       return { ...productState, sort: action.payload };
-    case "FILTER_BY_STOCK":
-      return { ...productState, byStock: !productState.byStock };
+
     case "FILTER_BY_DELIVERY":
       return { ...productState, byFastDelivery: !productState.byFastDelivery };
     case "FILTER_BY_SEARCH":
       return { ...productState, searchQuery: action.payload };
     case "CLEAR_FILTERS":
-      return { byStock: false, byFastDelivery: false };
+      return {
+        byFastDelivery: false,
+        searchQuery: "",
+      };
     default:
       return productState;
   }

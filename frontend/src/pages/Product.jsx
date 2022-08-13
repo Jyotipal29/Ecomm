@@ -171,7 +171,7 @@ const Product = () => {
     try {
       if (isAuth) {
         const { data } = await axios.get(`${api}/products/find/${id}`);
-        // console.log(res.data);
+        console.log("174", data);
         dispatch({
           type: "ADD_CART",
           payload: {
@@ -228,21 +228,22 @@ const Product = () => {
     <Container>
       <Announcement />
       <Navbar />
-      <Wrapper>
-        <ImgContainer>
-          <Image src={product.imageUrl} />
-        </ImgContainer>
-        <InfoContainer>
-          <Title>{product.name}</Title>
-          <Desc>{product.description}</Desc>
-          <Price>{product.price}</Price>
-          {product.fastDelivery ? (
-            <Desc>Fast Delivery</Desc>
-          ) : (
-            <Desc>4 days Delivery</Desc>
-          )}
+      {product && (
+        <Wrapper>
+          <ImgContainer>
+            <Image src={product.imageUrl} />
+          </ImgContainer>
+          <InfoContainer>
+            <Title>{product.name}</Title>
+            <Desc>{product.description}</Desc>
+            <Price>{product.price}</Price>
+            {product.fastDelivery ? (
+              <Desc>Fast Delivery</Desc>
+            ) : (
+              <Desc>4 days Delivery</Desc>
+            )}
 
-          {/* <FilterContainer>
+            {/* <FilterContainer>
             <Filter>
               <FilterTitle>
                 {product.color?.map((c) => (
@@ -259,20 +260,24 @@ const Product = () => {
               </FilterSize>
             </Filter>
           </FilterContainer> */}
-          <AmountContainer>
-            {console.log(product.qty)}
-            <AddIcon onClick={() => handleInc(product._id)} />
-            <Amount>{product.qty}</Amount>
-            <RemoveIcon onClick={() => handleDec(product._id)} />
-          </AmountContainer>
-          <AddContainer>
-            <Button onClick={handleCart}>
-              {!product.InStock ? "Out of stock" : " ADD TO CART"}
-            </Button>
-            <Button onClick={handleWish}>ADD TO wishlist</Button>
-          </AddContainer>
-        </InfoContainer>
-      </Wrapper>
+            <AmountContainer>
+              {console.log(product.qty)}
+              <AddIcon onClick={() => handleInc(product._id)} />
+              <Amount>{product.qty}</Amount>
+              <RemoveIcon onClick={() => handleDec(product._id)} />
+            </AmountContainer>
+            <AddContainer>
+              <Button
+                onClick={handleCart}
+                disabled={product.qty === product.InStock}
+              >
+                {!product.InStock ? "Out of stock" : " ADD TO CART"}
+              </Button>
+              <Button onClick={handleWish}>ADD TO wishlist</Button>
+            </AddContainer>
+          </InfoContainer>
+        </Wrapper>
+      )}
       <Footer />
     </Container>
   );

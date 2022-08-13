@@ -11,6 +11,7 @@ import { useAuth } from "../context/auth/authContext";
 import { logoutCall } from "../context/apiCalls";
 import { useCart } from "../context/cart/cartContext";
 import { useWish } from "../context/wishlist/wishContext";
+import { useProduct } from "../context/product/productContext";
 
 const Container = styled.div`
   height: 60px;
@@ -70,6 +71,7 @@ const Button = styled.button`
   margin-bottom: 10px;
 `;
 const Navbar = ({ cat }) => {
+  const { productState, productDispatch } = useProduct();
   const navigate = useNavigate();
   const {
     state: { user },
@@ -86,7 +88,10 @@ const Navbar = ({ cat }) => {
   // console.log(cart);
   const handleLogout = (e) => {
     e.preventDefault();
-    logoutCall(dispatch);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.setItem("isAuth", false);
+    dispatch({ type: "LOGOUT" });
     navigate("/login");
   };
   return (
@@ -99,7 +104,16 @@ const Navbar = ({ cat }) => {
             </Link>
           </Language>
           <SearchContainer>
-            <Input />
+            <Input
+              type="search"
+              placeholder="Search a product..."
+              onChange={(e) => {
+                productDispatch({
+                  type: "FILTER_BY_SEARCH",
+                  payload: e.target.value,
+                });
+              }}
+            />
             <SearchOutlinedIcon style={{ color: "gary", fontSize: "16px" }} />
           </SearchContainer>
         </Left>

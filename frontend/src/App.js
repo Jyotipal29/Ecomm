@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import { useAuth } from "./context/auth/authContext";
 import WishList from "./pages/wishList";
 import PageNotFound from "./pages/PageNotFound";
+import Address from "./pages/Address";
 function App() {
   // const user = useSelector((state) => state.user.currentUser);
   const {
@@ -31,6 +32,7 @@ function App() {
           <Route exact path="/wishList" element={<WishList />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/address" element={<Address />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>

@@ -164,13 +164,17 @@ const WishList = () => {
     state: { wish },
     wishDispatch,
   } = useWish();
-  console.log(wish);
+  console.log("167", wish);
   console.log(wish);
   const incHandle = (id) => {
     dispatch({ type: "INC_QTY", payload: id });
   };
   const decHandle = (id) => {
     dispatch({ type: "DEC_QTY", payload: id });
+  };
+  const removeHandle = (id) => {
+    console.log(id, "176");
+    wishDispatch({ type: "REMOVE_FROM_WISH", payload: id });
   };
 
   // const handleCart = async (id) => {
@@ -210,48 +214,54 @@ const WishList = () => {
           <TopButton>keep shoping</TopButton>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your cart ({cart.length})</TopText>
+            <TopText>Your cart ({cart && cart.length})</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
           <Info>
-            {wish.map((product) => (
-              <Product>
-                <ProductDetail>
-                  <Image src={product.imageUrl} />
-                  <Details>
-                    <ProductName>
-                      <b>Product:</b>
-                      {product.name}
-                    </ProductName>
-                    <ProductId>
-                      <b>ID:</b>
-                      {product._id}
-                    </ProductId>
-                    <ProductColor />
-                    <ProductSize>
-                      <b>Size:</b> s
-                    </ProductSize>
-                    {/* <Button onClick={() => handleMoveToCart(product.product)}>
+            {wish &&
+              wish.map((product) => (
+                <Product>
+                  {console.log(product.product, "226")}
+                  <ProductDetail>
+                    <Image src={product.imageUrl} />
+                    <Details>
+                      <ProductName>
+                        <b>Product:</b>
+                        {product.name}
+                      </ProductName>
+                      <ProductId>
+                        <b>ID:</b>
+                        {product.product._id}
+                      </ProductId>
+                      <ProductColor />
+                      <ProductSize>
+                        <b>Size:</b> s
+                      </ProductSize>
+                      {console.log(product.product._id, "242")}
+                      <Button onClick={() => removeHandle(product.product._id)}>
+                        remove from wishlist
+                      </Button>
+                      {/* <Button onClick={() => handleMoveToCart(product.product)}>
                       MOVE TO CART
                     </Button> */}
 
-                    {/* <Button onClick={() => removeHandle(product.product)}>
+                      {/* <Button onClick={() => removeHandle(product.product)}>
                       remove from CART
                     </Button> */}
-                  </Details>
-                </ProductDetail>
-                <PriceDetail>
-                  <ProductAmountContainer>
-                    <AddIcon onClick={(id) => incHandle(product._id)} />
-                    <ProductAmount>{product.qty}</ProductAmount>
-                    <RemoveIcon onClick={(id) => decHandle(product._id)} />
-                  </ProductAmountContainer>
-                  <ProductPrice>{product.price}</ProductPrice>
-                </PriceDetail>
-              </Product>
-            ))}
+                    </Details>
+                  </ProductDetail>
+                  <PriceDetail>
+                    <ProductAmountContainer>
+                      {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
+                      {/* <ProductAmount>{product.qty}</ProductAmount> */}
+                      {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
+                    </ProductAmountContainer>
+                    <ProductPrice>{product.price}</ProductPrice>
+                  </PriceDetail>
+                </Product>
+              ))}
             <Hr />
           </Info>
           {/* <Summary>
