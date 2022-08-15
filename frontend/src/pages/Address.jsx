@@ -1,16 +1,33 @@
-import React from "react";
+import React, { useReducer } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 // import { useAuth } from "../context/auth/authContext";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart/cartContext";
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "CREATE_REQ":
+      return { ...state, loading: true };
+    case "CREATE_SUCC":
+      return { ...state, loading: false };
+    case "CREATE_FAIL":
+      return { ...state, loading: false };
+    default:
+      return state;
+  }
+};
+
 const Address = () => {
+  const [{ loading, error }, oDispatch] = useReducer(reducer, {
+    loading: false,
+    error: " ",
+  });
+
   const {
     state: { shippingAddress },
     dispatch,
   } = useCart();
-  console.log(shippingAddress, "11");
 
   const navigate = useNavigate();
   const [paymentMethodName, setPaymentMethod] = useState(

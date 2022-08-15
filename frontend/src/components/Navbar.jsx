@@ -8,7 +8,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/userRedux";
 import { useAuth } from "../context/auth/authContext";
-import { logoutCall } from "../context/apiCalls";
+// import { logoutCall } from "../context/apiCalls";
 import { useCart } from "../context/cart/cartContext";
 import { useWish } from "../context/wishlist/wishContext";
 import { useProduct } from "../context/product/productContext";
@@ -74,17 +74,17 @@ const Navbar = ({ cat }) => {
   const { productState, productDispatch } = useProduct();
   const navigate = useNavigate();
   const {
-    state: { user },
+    state: { user,wish },
     dispatch,
-  } = useAuth();
+  } = useCart();
 
   // console.log("77", user);
-  const {
-    state: { cart },
-  } = useCart();
-  const {
-    state: { wish },
-  } = useWish();
+  // const {
+  //   state: { cart },
+  // } = useCart();
+  // const {
+  //   state: { wish },
+  // } = useWish();
   // console.log(cart);
   const handleLogout = (e) => {
     e.preventDefault();
@@ -118,23 +118,24 @@ const Navbar = ({ cat }) => {
           </SearchContainer>
         </Left>
         <Center>
-          <Link
-            to={`/products/${cat}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <Logo>ShopCart</Logo>
-          </Link>
+          <Logo>ShopCart</Logo>
         </Center>
 
         <Right>
           {user ? (
             <>
-              <MenuItem>{user.username}</MenuItem>
+              <Link
+                to="/profile"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <h2>{user.username}</h2>
+              </Link>
+
               <Button onClick={handleLogout}>logout</Button>
             </>
           ) : (
             <>
-              <MenuItem>
+              {/* <MenuItem>
                 <Link
                   to="/register"
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -142,7 +143,7 @@ const Navbar = ({ cat }) => {
                   {" "}
                   REGISTER
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem>
                 <Link
                   to="/login"
@@ -159,8 +160,7 @@ const Navbar = ({ cat }) => {
             <Link
               to="/cart"
               style={{ textDecoration: "none", color: "inherit" }}
-            >
-              {cart.length}
+            >0
               <ShoppingCartIcon />
             </Link>
           </MenuItem>

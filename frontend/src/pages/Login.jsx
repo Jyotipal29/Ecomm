@@ -3,11 +3,12 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { api } from "../constants/api";
 import styled from "styled-components";
+import { useCart } from "../context/cart/cartContext";
 import { login } from "../redux/apiCalls";
 // import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../context/auth/authContext";
-import { loginCall } from "../context/apiCalls";
+// import { loginCall } from "../context/apiCalls";
 
 const Container = styled.div`
   width: 100vw;
@@ -73,7 +74,8 @@ const Error = styled.span`
 `;
 
 const Login = () => {
-  const { dispatch, isAuth, setIsAuth } = useAuth();
+  const { dispatch, isAuth, setIsAuth, token, setToken, error, setError } =
+    useCart();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -84,22 +86,24 @@ const Login = () => {
     try {
       const res = await axios.post(`${api}/auth/login`, { username, password });
       const user = res.data;
+      console.log("user login", user);
       const token = user.token;
       dispatch({ type: "LOGIN", payload: user });
-      localStorage.setItem("isAuth", true);
-      setIsAuth(true);
-
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
+      localStorage.setItem("isAuth", true);
+      setIsAuth(true);
+      console.log(isAuth);
       navigate("/");
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setError(error);
     }
   };
   return (
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
+        {error && <div>{error}</div>}
         <Form>
           <Input
             placeholder="username"

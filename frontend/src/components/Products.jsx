@@ -6,6 +6,7 @@ import axios from "axios";
 import { api } from "../constants/api";
 import { getProducts } from "../context/product/productAction";
 import { useProduct } from "../context/product/productContext";
+import { useCart } from "../context/cart/cartContext";
 const Container = styled.div`
   padding: 20px;
   display: flex;
@@ -14,23 +15,23 @@ const Container = styled.div`
 `;
 
 const Products = ({ cat }) => {
+  const { error, setError } = useCart();
   const {
     productState: { products, sort, byFastDelivery, searchQuery },
     productDispatch,
   } = useProduct();
 
   useEffect(() => {
-    const getProducts = async (cat) => {
-      console.log("28", cat);
+    const getProducts = async () => {
       try {
         const { data } = await axios.get(`${api}/products`);
         productDispatch({ type: "GET_PRODUCTS", payload: data });
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        setError(error);
       }
     };
     getProducts();
-  }, [cat]);
+  }, []);
 
   const transformProducts = () => {
     let sortedProducts = products;
@@ -56,7 +57,6 @@ const Products = ({ cat }) => {
     <Container>
       {transformProducts() &&
         transformProducts().map((item) => {
-          console.log(item);
           return <Product item={item} key={item._id} />;
         })}
     </Container>

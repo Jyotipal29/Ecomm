@@ -17,6 +17,7 @@ const ProductReducer = (productState, action) => {
       return { ...productState, searchQuery: action.payload };
     case "CLEAR_FILTERS":
       return {
+        ...productState,
         byFastDelivery: false,
         searchQuery: "",
       };

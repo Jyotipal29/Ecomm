@@ -131,27 +131,26 @@ const Product = () => {
   const location = useLocation();
   const {
     dispatch,
-    state: { cart },
+    isAuth,
+    token,
+    error,
+    setError,
+    state: { cart, wish },
   } = useCart();
-  const { isAuth, token } = useAuth();
-  const {
-    state: { wish },
-    wishDispatch,
-  } = useWish();
-
+  console.log(isAuth);
   const {
     productState: { product },
     productDispatch,
   } = useProduct();
-  console.log("product", product);
+  console.log("product", product.qty);
   const navigate = useNavigate();
   const id = location.pathname.split("/")[2];
   // const [product, setProduct] = useState({});
-  const [qty, setQty] = useState(1);
-  const [color, setColor] = useState(" ");
-  const [size, setSize] = useState(" ");
+  const [quantity, setQuantity] = useState(1);
+  // const [color, setColor] = useState(" ");
+  // const [size, setSize] = useState(" ");
 
-  console.log(product);
+  console.log("product ek", product);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -160,14 +159,15 @@ const Product = () => {
         console.log("159", data);
         productDispatch({ type: "GET_SINGLE_PRODUCT", payload: data });
         localStorage.setItem("product", JSON.stringify(product));
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        setError(error);
       }
     };
     getProduct();
   }, [id]);
 
   const handleCart = async () => {
+    console.log("clicked");
     try {
       if (isAuth) {
         const { data } = await axios.get(`${api}/products/find/${id}`);
@@ -179,7 +179,7 @@ const Product = () => {
             name: data.name,
             imageUrl: data.imageUrl,
             price: data.price,
-            qty,
+            qty: quantity,
             InStock: data.InStock,
           },
         });
@@ -187,23 +187,24 @@ const Product = () => {
       } else {
         navigate("/login");
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setError(error);
     }
   };
   const handleWish = async () => {
+    console.log("clicked");
     try {
       if (isAuth) {
         const { data } = await axios.get(`${api}/products/find/${id}`);
         console.log("185", data);
-        wishDispatch({
+        dispatch({
           type: "ADD_WISH",
           payload: {
-            product: data,
+            product: data._id,
             name: data.name,
             imageUrl: data.imageUrl,
             price: data.price,
-            qty,
+            qty: quantity,
             // InStock,
           },
         });
@@ -211,23 +212,26 @@ const Product = () => {
       } else {
         navigate("/login");
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setError(error);
     }
   };
-  const handleInc = (id) => {
-    console.log(id);
-    dispatch({ type: "INC_QTY", payload: id });
-    console.log(product.qty);
-  };
-  const handleDec = (id) => {
-    dispatch({ type: "DEC_QTY", payload: id });
-  };
+  // const handleInc = (product) => {
+  //   console.log(product);
+  //   dispatch({ type: "INC_QTY", payload: product });
+  //   console.log("inc");
+  // };
+  // const handleDec = (product) => {
+  //   console.log(product);
+
+  //   dispatch({ type: "DEC_QTY", payload: product });
+  // };
 
   return (
     <Container>
       <Announcement />
       <Navbar />
+      {error && <div>{error}</div>}
       {product && (
         <Wrapper>
           <ImgContainer>
@@ -262,9 +266,38 @@ const Product = () => {
           </FilterContainer> */}
             <AmountContainer>
               {console.log(product.qty)}
-              <AddIcon onClick={() => handleInc(product._id)} />
-              <Amount>{product.qty}</Amount>
-              <RemoveIcon onClick={() => handleDec(product._id)} />
+              {/* <Select
+                value={product.InStock}
+                onChange={(e) =>
+                  dispatch({
+                    type: "CHANGE_CART_QTY",
+                    payload: {
+                      id: product.product,
+                      qty: e.target.value,
+                    },
+                  })
+                }
+              >
+                {[...Array(product.InStock).keys()].map((x) => (
+                  <Option key={x + 1} value={x + 1}>
+                    {x + 1}
+                  </Option>
+                ))}
+              </Select> */}
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                disabled={product.qty === product.InStock}
+              >
+                +
+              </button>
+              <Amount>{quantity}</Amount>
+
+              <button
+                onClick={() => setQuantity(quantity - 1)}
+                disabled={product.qty === 1}
+              >
+                -
+              </button>
             </AmountContainer>
             <AddContainer>
               <Button

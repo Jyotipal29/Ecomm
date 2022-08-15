@@ -160,16 +160,18 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const Cart = () => {
+  // const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const {
-    state: { cart },
+    state: { cart, wish },
     dispatch,
+    isAuth,
+    setIsAuth,
+    error,
+    setError,
   } = useCart();
   console.log(cart);
-  const { isAuth, setIsAuth } = useAuth();
-  const {
-    state: { wish },
-  } = useWish();
+
   const [total, setTotal] = useState();
 
   useEffect(() => {
@@ -232,7 +234,7 @@ const Cart = () => {
                       <b>Size:</b> s
                     </ProductSize>
                     {console.log(product, "product")}
-                    <Select
+                    {/* <Select
                       value={product.qty}
                       onChange={(e) =>
                         dispatch({
@@ -247,7 +249,21 @@ const Cart = () => {
                       {[...Array(product.InStock).keys()].map((x) => (
                         <Option key={x + 1}>{x + 1}</Option>
                       ))}
-                    </Select>
+                    </Select> */}
+                    {/* <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      disabled={product.qty === product.InStock}
+                    >
+                      +
+                    </button> */}
+                    <p>{product.qty}</p>
+
+                    {/* <button
+                      onClick={() => setQuantity(quantity - 1)}
+                      disabled={product.qty === 1}
+                    >
+                      -
+                    </button> */}
                     {/* <ProductAmount>{product.qty}</ProductAmount> */}
                     <Button onClick={() => removeHandle(product.product)}>
                       remove from CART
@@ -292,7 +308,9 @@ const Cart = () => {
               token={onToken}
               stripeKey={KEY}
             > */}
-            <Button onClick={checkoutHandler}>CHECKOUT NOW</Button>
+            <Button disabled={cart.length === 0} onClick={checkoutHandler}>
+              CHECKOUT NOW
+            </Button>
             {/* </StripeCheckout> */}
           </Summary>
         </Bottom>

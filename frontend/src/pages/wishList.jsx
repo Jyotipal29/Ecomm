@@ -155,15 +155,19 @@ const Button = styled.button`
 
 const WishList = () => {
   const {
-    state: { cart },
+    state: { cart, wish },
     dispatch,
+    token,
+    isAuth,
+    error,
+    setError,
   } = useCart();
 
-  const { isAuth, setIsAuth } = useAuth();
-  const {
-    state: { wish },
-    wishDispatch,
-  } = useWish();
+  // const { isAuth, setIsAuth } = useAuth();
+  // const {
+  //   state: { wish },
+  //   wishDispatch,
+  // } = useWish();
   console.log("167", wish);
   console.log(wish);
   const incHandle = (id) => {
@@ -174,7 +178,11 @@ const WishList = () => {
   };
   const removeHandle = (id) => {
     console.log(id, "176");
-    wishDispatch({ type: "REMOVE_FROM_WISH", payload: id });
+    try {
+      dispatch({ type: "REMOVE_FROM_WISH", payload: id });
+    } catch (error) {
+      setError(error);
+    }
   };
 
   // const handleCart = async (id) => {
@@ -207,64 +215,69 @@ const WishList = () => {
     <Container>
       <Announcement />
       <Navbar />
+      {error && <div>{error}</div>}
 
-      <Wrapper>
-        <Title>YOUR WishList</Title>
-        <Top>
-          <TopButton>keep shoping</TopButton>
-          <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your cart ({cart && cart.length})</TopText>
-          </TopTexts>
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
-        </Top>
-        <Bottom>
-          <Info>
-            {wish &&
-              wish.map((product) => (
-                <Product>
-                  {console.log(product.product, "226")}
-                  <ProductDetail>
-                    <Image src={product.imageUrl} />
-                    <Details>
-                      <ProductName>
-                        <b>Product:</b>
-                        {product.name}
-                      </ProductName>
-                      <ProductId>
-                        <b>ID:</b>
-                        {product.product._id}
-                      </ProductId>
-                      <ProductColor />
-                      <ProductSize>
-                        <b>Size:</b> s
-                      </ProductSize>
-                      {console.log(product.product._id, "242")}
-                      <Button onClick={() => removeHandle(product.product._id)}>
-                        remove from wishlist
-                      </Button>
-                      {/* <Button onClick={() => handleMoveToCart(product.product)}>
+      {wish && (
+        <Wrapper>
+          <Title>YOUR WishList</Title>
+          <Top>
+            <TopButton>keep shoping</TopButton>
+            <TopTexts>
+              <TopText>Shopping Bag(2)</TopText>
+              <TopText>Your cart ({cart && cart.length})</TopText>
+            </TopTexts>
+            <TopButton type="filled">CHECKOUT NOW</TopButton>
+          </Top>
+          <Bottom>
+            <Info>
+              {wish &&
+                wish.map((product) => (
+                  <Product>
+                    {console.log(product.product, "226")}
+                    <ProductDetail>
+                      <Image src={product.imageUrl} />
+                      <Details>
+                        <ProductName>
+                          <b>Product:</b>
+                          {product.name}
+                        </ProductName>
+                        <ProductId>
+                          <b>ID:</b>
+                          {product.product._id}
+                        </ProductId>
+                        <ProductColor />
+                        <ProductSize>
+                          <b>Size:</b> s
+                        </ProductSize>
+                        <p>{product.qty}</p>
+                        {console.log(product.product._id, "242")}
+                        <Button
+                          onClick={() => removeHandle(product.product._id)}
+                        >
+                          remove from wishlist
+                        </Button>
+                        {/* <Button onClick={() => handleMoveToCart(product.product)}>
                       MOVE TO CART
                     </Button> */}
 
-                      {/* <Button onClick={() => removeHandle(product.product)}>
+                        {/* <Button onClick={() => removeHandle(product.product)}>
                       remove from CART
                     </Button> */}
-                    </Details>
-                  </ProductDetail>
-                  <PriceDetail>
-                    <ProductAmountContainer>
-                      {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
-                      {/* <ProductAmount>{product.qty}</ProductAmount> */}
-                      {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
-                    </ProductAmountContainer>
-                    <ProductPrice>{product.price}</ProductPrice>
-                  </PriceDetail>
-                </Product>
-              ))}
-            <Hr />
-          </Info>
-          {/* <Summary>
+                      </Details>
+                    </ProductDetail>
+                    <PriceDetail>
+                      <ProductAmountContainer>
+                        {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
+                        {/* <ProductAmount>{product.qty}</ProductAmount> */}
+                        {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
+                      </ProductAmountContainer>
+                      <ProductPrice>{product.price}</ProductPrice>
+                    </PriceDetail>
+                  </Product>
+                ))}
+              <Hr />
+            </Info>
+            {/* <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
@@ -295,8 +308,9 @@ const WishList = () => {
               <Button>CHECKOUT NOW</Button>
             </StripeCheckout>
           </Summary> */}
-        </Bottom>
-      </Wrapper>
+          </Bottom>
+        </Wrapper>
+      )}
       <Footer />
     </Container>
   );

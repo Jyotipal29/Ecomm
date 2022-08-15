@@ -1,5 +1,10 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
-import { useAuth } from "../auth/authContext";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import CartReducer from "./cartReducer";
 const cartContext = createContext();
 export const useCart = () => {
@@ -7,29 +12,32 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }) => {
-  const {
-    state: { user },
-  } = useAuth();
-  
   const [state, dispatch] = useReducer(CartReducer, {
-    cart: JSON.parse(localStorage.getItem("cart") || []),
-    shippingAddress: JSON.parse(localStorage.getItem("shippingAddress") || {}),
+    user: JSON.parse(localStorage.getItem("user")) || null,
+    shippingAddress:
+      JSON.parse(localStorage.getItem("shippingAddress") || null) || [],
+    wish: JSON.parse(localStorage.getItem("wish") || null) || [],
+    cart: JSON.parse(localStorage.getItem("cart") || null) || [],
   });
-
-
-
-
-
-
-
-
-  
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(state.cart));
-  }, [state.cart, user]);
+  const [error, setError] = useState(" ");
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [isAuth, setIsAuth] = useState(
+    JSON.parse(localStorage.getItem("isAuth")) || false
+  );
 
   return (
-    <cartContext.Provider value={{ state, dispatch }}>
+    <cartContext.Provider
+      value={{
+        state,
+        dispatch,
+        token,
+        setToken,
+        isAuth,
+        setIsAuth,
+        error,
+        setError,
+      }}
+    >
       {children}
     </cartContext.Provider>
   );

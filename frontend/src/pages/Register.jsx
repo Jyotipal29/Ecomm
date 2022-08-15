@@ -3,7 +3,8 @@ import axios from "axios";
 import { api } from "../constants/api";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../context/auth/authContext";
+import { useCart } from "../context/cart/cartContext";
+// import { useAuth } from "../context/auth/authContext";
 // import { registerCall } from "../context/apiCalls";
 const Container = styled.div`
   width: 100vw;
@@ -58,7 +59,7 @@ const Button = styled.button`
 `;
 
 const Register = () => {
-  const { dispatch, isAuth, setIsAuth } = useAuth();
+  const { dispatch, isAuth, setIsAuth, error, setError } = useCart();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -84,8 +85,8 @@ const Register = () => {
 
         setIsAuth("true");
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setError(error);
     }
     console.log("register done", { username, email, password });
 
@@ -95,6 +96,7 @@ const Register = () => {
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
+        {error && <div>{error}</div>}
         <Form>
           <Input
             placeholder="username"

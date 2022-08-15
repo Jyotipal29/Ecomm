@@ -11,15 +11,18 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Home from "./pages/Home";
-import { useAuth } from "./context/auth/authContext";
+// import { useAuth } from "./context/auth/authContext";
 import WishList from "./pages/wishList";
 import PageNotFound from "./pages/PageNotFound";
 import Address from "./pages/Address";
+import Order from "./pages/Order";
+import Profile from "./pages/Profile";
+import { useCart } from "./context/cart/cartContext";
 function App() {
   // const user = useSelector((state) => state.user.currentUser);
   const {
     state: { user },
-  } = useAuth();
+  } = useCart();
   console.log(user);
   return (
     <Router>
@@ -32,7 +35,10 @@ function App() {
           <Route exact path="/wishList" element={<WishList />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
+          {/* <Route exact path="/profile" element={<Profile />} /> */}
+
           <Route exact path="/address" element={<Address />} />
+          <Route exact path="/order" element={<Order />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
