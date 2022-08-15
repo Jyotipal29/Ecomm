@@ -84,12 +84,15 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${api}/auth/login`, { username, password });
-      const user = res.data;
-      console.log("user login", user);
-      const token = user.token;
-      dispatch({ type: "LOGIN", payload: user });
-      localStorage.setItem("user", JSON.stringify(user));
+      const { data } = await axios.post(`${api}/auth/login`, {
+        username,
+        password,
+      });
+      // const user = res.data;
+      // console.log("user login", user);
+      const token = data.token;
+      dispatch({ type: "LOGIN", payload: data });
+      localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem("token", token);
       localStorage.setItem("isAuth", true);
       setIsAuth(true);

@@ -20,10 +20,7 @@ import Profile from "./pages/Profile";
 import { useCart } from "./context/cart/cartContext";
 function App() {
   // const user = useSelector((state) => state.user.currentUser);
-  const {
-    state: { user },
-  } = useCart();
-  console.log(user);
+
   return (
     <Router>
       <div className="App">

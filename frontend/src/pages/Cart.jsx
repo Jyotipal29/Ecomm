@@ -175,17 +175,19 @@ const Cart = () => {
   const [total, setTotal] = useState();
 
   useEffect(() => {
-    setTotal(
-      cart.reduce((acc, curr) => acc + Number(curr.price) * curr.qty, 0)
-    );
+    if (cart) {
+      setTotal(
+        cart.reduce((acc, curr) => acc + Number(curr.price) * curr.qty, 0)
+      );
+    }
   }, [cart]);
   // console.log("157", wish);
 
-  const removeHandle = (id) => {
+  const removeHandle = async (id) => {
     // console.log("168", id);
 
     dispatch({ type: "REMOVE_FROM_CART", payload: id });
-    localStorage.setItem("cart", JSON.stringify(cart));
+    // localStorage.setItem("cart", JSON.stringify(cartVal));
   };
 
   const checkoutHandler = () => {

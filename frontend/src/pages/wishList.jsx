@@ -176,10 +176,11 @@ const WishList = () => {
   const decHandle = (id) => {
     dispatch({ type: "DEC_QTY", payload: id });
   };
-  const removeHandle = (id) => {
+  const removeHandle = async (id) => {
     console.log(id, "176");
     try {
       dispatch({ type: "REMOVE_FROM_WISH", payload: id });
+      // localStorage.setItem("wish", JSON.stringify(wishVal));
     } catch (error) {
       setError(error);
     }

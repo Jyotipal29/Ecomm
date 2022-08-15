@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../redux/userRedux";
 import { useAuth } from "../context/auth/authContext";
 // import { logoutCall } from "../context/apiCalls";
-import { useCart } from "../context/cart/cartContext";
+import { CartProvider, useCart } from "../context/cart/cartContext";
 import { useWish } from "../context/wishlist/wishContext";
 import { useProduct } from "../context/product/productContext";
 
@@ -74,7 +74,7 @@ const Navbar = ({ cat }) => {
   const { productState, productDispatch } = useProduct();
   const navigate = useNavigate();
   const {
-    state: { user,wish },
+    state: { user, wish, cart },
     dispatch,
   } = useCart();
 
@@ -160,7 +160,8 @@ const Navbar = ({ cat }) => {
             <Link
               to="/cart"
               style={{ textDecoration: "none", color: "inherit" }}
-            >0
+            >
+              {cart?.length}
               <ShoppingCartIcon />
             </Link>
           </MenuItem>
@@ -169,7 +170,7 @@ const Navbar = ({ cat }) => {
               to="/wishList"
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              {wish.length}
+              {wish?.length}
               <FavoriteBorderOutlinedIcon />
             </Link>
           </MenuItem>

@@ -1,5 +1,59 @@
 const CartReducer = (state, action) => {
   switch (action.type) {
+    case "ADD_CART":
+      const item = action.payload;
+      const existItem = state.cart?.find((x) => x.product === item.product);
+      const cart = existItem
+        ? state.cart?.map((x) => (x.product === existItem.product ? item : x))
+        : [...state.cart, item];
+      localStorage.setItem("cart", JSON.stringify(cart));
+      return {
+        cart,
+      };
+
+    case "REMOVE_FROM_CART":
+      const cartVal = state.cart?.filter((c) => c.product !== action.payload);
+      localStorage.setItem("cart", JSON.stringify(cartVal));
+
+      return {
+        ...state,
+        cart: cartVal,
+      };
+    case "ADD_WISH":
+      const itemw = action.payload;
+      const existItemw = state.wish?.find((x) => x.product === itemw.product);
+      const wish = existItemw
+        ? state.wish.map((x) => (x.product === existItemw.product ? itemw : x))
+        : [...state.wish, itemw];
+      localStorage.setItem("wish", JSON.stringify(wish));
+
+      return {
+        wish,
+      };
+    case "REMOVE_FROM_WISH":
+      const wishVal = state.wish?.filter(
+        (c) => c.product._id !== action.payload
+      );
+      localStorage.setItem("wish", JSON.stringify(wishVal));
+
+      return {
+        ...state,
+        wish: wishVal,
+      };
+    case "SAVE_ADDRESS":
+      return {
+        ...state,
+        shippingAddress: {
+          ...state.shippingAddress,
+          shippingAddress: action.payload,
+        },
+      };
+    case "ORDER_DONE":
+      return {
+        ...state,
+        cart: [],
+        shippingAddress: {},
+      };
     case "LOGIN":
       return {
         user: action.payload,
@@ -14,67 +68,11 @@ const CartReducer = (state, action) => {
       };
     case "LOGOUT":
       return {
+        ...state,
         user: null,
-      };
-    case "ADD_CART":
-      const item = action.payload;
-      const existItem = state.cart?.find((x) => x.product === item.product);
-      if (existItem) {
-        return {
-          ...state,
-          cart: state.cart.map((x) =>
-            x.product === existItem.product ? item : x
-          ),
-        };
-      } else {
-        return {
-          ...state,
-          cart: [...state.cart, item],
-        };
-      }
-
-    case "REMOVE_FROM_CART":
-      return {
-        ...state,
-        cart: state.cart.filter((c) => c.product !== action.payload),
-      };
-    case "ADD_WISH":
-      const itemw = action.payload;
-      const existItemw = state.wish.find((x) => x.product === itemw);
-      if (existItemw) {
-        return {
-          ...state,
-          wish: state.wish.map((x) =>
-            x.product === existItemw.product ? itemw : x
-          ),
-        };
-      } else {
-        return {
-          ...state,
-          wish: [...state.wish, itemw],
-        };
-      }
-    case "REMOVE_FROM_WISH":
-      return {
-        ...state,
-        wish: state.wish.filter((c) => c.product._id !== action.payload),
-      };
-    case "SAVE_ADDRESS":
-      return {
-        ...state,
-        shippingAddress: {
-          ...state.shippingAddress,
-          shippingAddress: action.payload,
-        },
-      };
-    case "ORDER_DONE":
-      return {
-        ...state,
         cart: [],
-        shippingAddress: {
-          // ...state.shippingAddress,
-          // shippingAddress: action.payload,
-        },
+        wish: [],
+        shippingAddress: {},
       };
     case "INC_QTY":
       return {

@@ -68,18 +68,18 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${api}/auth/register`, {
+      const { data } = await axios.post(`${api}/auth/register`, {
         username,
         email,
         password,
       });
-      const user = res.data;
-      const token = user.token;
-      console.log("77", user, token);
-      dispatch({ type: "REGISTER", payload: user });
+      // const user = res.data;
+      const token = data.token;
+      // console.log("77", user, token);
+      dispatch({ type: "REGISTER", payload: data });
 
-      if (res.data) {
-        localStorage.setItem("user", JSON.stringify(user));
+      if (data) {
+        localStorage.setItem("user", JSON.stringify(data));
         localStorage.setItem("isAuth", true);
         localStorage.setItem("token", token);
 

@@ -142,7 +142,7 @@ const Product = () => {
     productState: { product },
     productDispatch,
   } = useProduct();
-  console.log("product", product.qty);
+  console.log("product", product);
   const navigate = useNavigate();
   const id = location.pathname.split("/")[2];
   // const [product, setProduct] = useState({});
@@ -150,7 +150,7 @@ const Product = () => {
   // const [color, setColor] = useState(" ");
   // const [size, setSize] = useState(" ");
 
-  console.log("product ek", product);
+  console.log("cart ek", cart);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -183,7 +183,7 @@ const Product = () => {
             InStock: data.InStock,
           },
         });
-        localStorage.setItem("cart", JSON.stringify(cart));
+        // localStorage.setItem("cart", JSON.stringify(cartVal));
       } else {
         navigate("/login");
       }
@@ -208,7 +208,7 @@ const Product = () => {
             // InStock,
           },
         });
-        localStorage.setItem("wish", JSON.stringify(wish));
+        // localStorage.setItem("wish", JSON.stringify(wishVal));
       } else {
         navigate("/login");
       }
@@ -265,7 +265,7 @@ const Product = () => {
             </Filter>
           </FilterContainer> */}
             <AmountContainer>
-              {console.log(product.qty)}
+              {/* {console.log(product.qty)} */}
               {/* <Select
                 value={product.InStock}
                 onChange={(e) =>
