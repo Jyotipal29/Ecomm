@@ -8,6 +8,7 @@ const CartReducer = (state, action) => {
         : [...state.cart, item];
       localStorage.setItem("cart", JSON.stringify(cart));
       return {
+        ...state,
         cart,
       };
 
@@ -28,6 +29,7 @@ const CartReducer = (state, action) => {
       localStorage.setItem("wish", JSON.stringify(wish));
 
       return {
+        ...state,
         wish,
       };
     case "REMOVE_FROM_WISH":
@@ -56,14 +58,17 @@ const CartReducer = (state, action) => {
       };
     case "LOGIN":
       return {
+        ...state,
         user: action.payload,
       };
     case "REGISTER":
       return {
+        ...state,
         user: action.payload,
       };
     case "UPDATE_USER":
       return {
+        ...state,
         user: action.payload,
       };
     case "LOGOUT":
