@@ -11,6 +11,8 @@ import { useAuth } from "../context/auth/authContext";
 import { useWish } from "../context/wishlist/wishContext";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { api } from "../constants/api";
 const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
@@ -173,6 +175,14 @@ const Cart = () => {
   console.log(cart);
 
   const [total, setTotal] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get(`${api}/carts/`);
+      console.log(data.carts, "data");
+    };
+    fetchData();
+  });
 
   useEffect(() => {
     if (cart) {
