@@ -7,7 +7,7 @@ const {
   getCart,
 } = require("../controllers/cartController");
 //REGISTER
-router.get("/", getCart);
+router.get("/", protect, getCart);
 router.post("/add", protect, addToCart);
 //login
 router.delete("/remove", removeFromCart);

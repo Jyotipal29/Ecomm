@@ -171,6 +171,7 @@ const Cart = () => {
     setIsAuth,
     error,
     setError,
+    token,
   } = useCart();
   console.log(cart);
 
@@ -178,7 +179,12 @@ const Cart = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(`${api}/carts/`);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(`${api}/carts/`, config);
       console.log(data.carts, "data");
     };
     fetchData();
