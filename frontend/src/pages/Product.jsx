@@ -183,7 +183,6 @@ const Product = () => {
             InStock: data.InStock,
           },
         });
-        // localStorage.setItem("cart", JSON.stringify(cartVal));
       } else {
         navigate("/login");
       }

@@ -55,7 +55,7 @@ const addToCart = expressAsyncHandler(async (req, res) => {
       //if cart not there then createv one cart
       const cart = new Cart({
         user: req.user._id,
-        cartItems: [req.body.cartItems],
+        cartItems: req.body.cartItems,
       });
       cart.save((error, cart) => {
         if (error) return res.status(400).json({ error });
@@ -67,9 +67,7 @@ const addToCart = expressAsyncHandler(async (req, res) => {
   });
 });
 
-const removeFromCart = expressAsyncHandler(async (req, res) => {
-  res.json({ cart: "deleted" });
-});
+const removeFromCart = expressAsyncHandler(async (req, res) => {});
 
 module.exports = {
   addToCart,

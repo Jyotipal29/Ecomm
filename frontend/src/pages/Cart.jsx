@@ -173,7 +173,6 @@ const Cart = () => {
     setError,
     token,
   } = useCart();
-  console.log(cart);
 
   const [total, setTotal] = useState();
 
@@ -185,11 +184,19 @@ const Cart = () => {
         },
       };
       const { data } = await axios.get(`${api}/carts/`, config);
-      console.log(data.carts, "data");
+
+      const dataM = data.carts[1].cartItems;
+      // console.log(dataM, "data");
+      // const dataM = data.carts.map((item) => {
+      //   console.log(item.cartItems);
+      // });
+      dispatch({ type: "GET_CART", payload: dataM });
+      // console.log(dataM, "data");
     };
     fetchData();
-  });
+  }, []);
 
+  console.log(cart, "cart");
   useEffect(() => {
     if (cart) {
       setTotal(
@@ -233,74 +240,51 @@ const Cart = () => {
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
-          <Info>
-            {cart.map((product) => (
-              <Product>
-                <ProductDetail>
-                  <Image src={product.imageUrl} />
-                  <Details>
-                    <ProductName>
-                      <b>Product:</b>
-                      {product.name}
-                    </ProductName>
-                    <ProductId>
-                      <b>ID:</b>
-                      {product.product}
-                    </ProductId>
-                    <ProductColor />
-                    <ProductSize>
-                      <b>Size:</b> s
-                    </ProductSize>
-                    {console.log(product, "product")}
-                    {/* <Select
-                      value={product.qty}
-                      onChange={(e) =>
-                        dispatch({
-                          type: "CHANGE_CART_QTY",
-                          payload: {
-                            id: product.product,
-                            qty: e.target.value,
-                          },
-                        })
-                      }
-                    >
-                      {[...Array(product.InStock).keys()].map((x) => (
-                        <Option key={x + 1}>{x + 1}</Option>
-                      ))}
-                    </Select> */}
-                    {/* <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      disabled={product.qty === product.InStock}
-                    >
-                      +
-                    </button> */}
-                    <p>{product.qty}</p>
+          {cart.map((item) => (
+            <Product>
+              {/* {console.log(product.product, "226")} */}
+              <ProductDetail>
+                <Image src={item.imageUrl} />
+                <Details>
+                  <ProductName>
+                    <b>Product:</b>
+                    {item.name}
+                  </ProductName>
+                  <ProductId>
+                    <b>ID:</b>
+                    {item._id}
+                  </ProductId>
+                  <ProductColor />
+                  <ProductSize>
+                    <b>Size:</b> s
+                  </ProductSize>
+                  <p>{item.qty}</p>
+                  {/* {console.log(product.product._id, "242")} */}
+                  {/* <Button onClick={() => removeHandle(product.product._id)}>
+                    remove from wishlist
+                  </Button> */}
+                  {/* <Button onClick={() => handleMoveToCart(product.product)}>
+                      MOVE TO CART
+                    </Button> */}
 
-                    {/* <button
-                      onClick={() => setQuantity(quantity - 1)}
-                      disabled={product.qty === 1}
-                    >
-                      -
-                    </button> */}
-                    {/* <ProductAmount>{product.qty}</ProductAmount> */}
-                    <Button onClick={() => removeHandle(product.product)}>
+                  {/* <Button onClick={() => removeHandle(product.product)}>
                       remove from CART
-                    </Button>
-                  </Details>
-                </ProductDetail>
-                <PriceDetail>
-                  <ProductAmountContainer>
-                    ${product.price * product.qty}
-                    <ProductPrice></ProductPrice>
-                  </ProductAmountContainer>
-                </PriceDetail>
-              </Product>
-            ))}
-            <Hr />
-          </Info>
+                    </Button> */}
+                </Details>
+              </ProductDetail>
+              <PriceDetail>
+                <ProductAmountContainer>
+                  {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
+                  {/* <ProductAmount>{product.qty}</ProductAmount> */}
+                  {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
+                </ProductAmountContainer>
+                <ProductPrice>{item.price}</ProductPrice>
+              </PriceDetail>
+            </Product>
+          ))}
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-            {/* <SummaryItem>
+            {/* <SummaryItem> 
               <SummaryItemText>Subtotal</SummaryItemText>
               <SummaryItemPrice>$ {total}</SummaryItemPrice>
             </SummaryItem>

@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
     shippingAddress:
       JSON.parse(localStorage.getItem("shippingAddress") || null) || [],
     wish: JSON.parse(localStorage.getItem("wish") || null) || [],
-    cart: JSON.parse(localStorage.getItem("cart") || null) || [],
+    cart: [],
   });
   const [error, setError] = useState(" ");
   const [token, setToken] = useState(localStorage.getItem("token") || null);

@@ -11,7 +11,7 @@ const protect = asyncHandler(async (req, res, next) => {
     try {
       //get token header
 
-      token = req.headers.authorization.split(" ")[2];
+      token = req.headers.authorization.split(" ")[1];
       // console.log({ token });
 
       //verify token

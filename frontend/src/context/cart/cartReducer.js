@@ -1,12 +1,16 @@
 const CartReducer = (state, action) => {
   switch (action.type) {
+    case "GET_CART":
+      return {
+        ...state,
+        cart: action.payload,
+      };
     case "ADD_CART":
       const item = action.payload;
       const existItem = state.cart?.find((x) => x.product === item.product);
       const cart = existItem
         ? state.cart?.map((x) => (x.product === existItem.product ? item : x))
         : [...state.cart, item];
-      localStorage.setItem("cart", JSON.stringify(cart));
       return {
         ...state,
         cart,
