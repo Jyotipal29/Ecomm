@@ -185,7 +185,7 @@ const Cart = () => {
       };
       const { data } = await axios.get(`${api}/carts/`, config);
 
-      const dataM = data.carts[1].cartItems;
+      const dataM = data.carts[0].cartItems;
       // console.log(dataM, "data");
       // const dataM = data.carts.map((item) => {
       //   console.log(item.cartItems);
