@@ -137,12 +137,12 @@ const Product = () => {
     setError,
     state: { cart, wish },
   } = useCart();
-  console.log(isAuth);
+  // console.log(isAuth);
   const {
     productState: { product },
     productDispatch,
   } = useProduct();
-  console.log("product", product);
+  // console.log("product", product);
   const navigate = useNavigate();
   const id = location.pathname.split("/")[2];
   // const [product, setProduct] = useState({});
@@ -150,13 +150,13 @@ const Product = () => {
   // const [color, setColor] = useState(" ");
   // const [size, setSize] = useState(" ");
 
-  console.log("cart ek", cart);
+  // console.log("cart ek", cart);
 
   useEffect(() => {
     const getProduct = async () => {
       try {
         const { data } = await axios.get(`${api}/products/find/${id}`);
-        console.log("159", data);
+        // console.log("159", data);
         productDispatch({ type: "GET_SINGLE_PRODUCT", payload: data });
         localStorage.setItem("product", JSON.stringify(product));
       } catch (error) {
@@ -166,23 +166,57 @@ const Product = () => {
     getProduct();
   }, [id]);
 
-  const handleCart = async () => {
-    console.log("clicked");
+  const handleCart = async ({ _id, qty, price, imageUrl, name, InStock }) => {
+    // console.log(qty, price, _id, name, imageUrl, InStock);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    if (token) {
+      const { data } = await axios.post(`${api}/carts/add`, config, {
+        name,
+        _id,
+        price,
+        qty,
+        imageUrl,
+        InStock,
+      });
+      console.log(data, "data");
+    } else {
+      console.log("no token");
+    }
+
     try {
       if (isAuth) {
-        const { data } = await axios.get(`${api}/products/find/${id}`);
-        console.log("174", data);
-        dispatch({
-          type: "ADD_CART",
-          payload: {
-            product: data._id,
-            name: data.name,
-            imageUrl: data.imageUrl,
-            price: data.price,
-            qty: quantity,
-            InStock: data.InStock,
-          },
-        });
+        // const { data } = await axios.get(`${api}/products/find/${id}`);
+        // console.log("174", data);
+        // dispatch({
+        //   type: "ADD_CART",
+        //   payload: {
+        //     product: data._id,
+        //     name: data.name,
+        //     imageUrl: data.imageUrl,
+        //     price: data.price,
+        //     qty: quantity,
+        //     InStock: data.InStock,
+        //   },
+        // });
+        // const config = {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // };
+        // const { data } = await axios.post(`${api}/carts/add`, config, {
+        //   name,
+        //   _id,
+        //   price,
+        //   qty,
+        //   imageUrl,
+        //   InStock,
+        // });
+        // console.log(data, "data");
       } else {
         navigate("/login");
       }
@@ -300,7 +334,7 @@ const Product = () => {
             </AmountContainer>
             <AddContainer>
               <Button
-                onClick={handleCart}
+                onClick={() => handleCart(product)}
                 disabled={product.qty === product.InStock}
               >
                 {!product.InStock ? "Out of stock" : " ADD TO CART"}

@@ -184,14 +184,9 @@ const Cart = () => {
         },
       };
       const { data } = await axios.get(`${api}/carts/`, config);
-
       const dataM = data.carts[0].cartItems;
-      // console.log(dataM, "data");
-      // const dataM = data.carts.map((item) => {
-      //   console.log(item.cartItems);
-      // });
+      console.log(dataM);
       dispatch({ type: "GET_CART", payload: dataM });
-      // console.log(dataM, "data");
     };
     fetchData();
   }, []);
@@ -240,51 +235,52 @@ const Cart = () => {
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
-          {cart.map((item) => (
-            <Product>
-              {/* {console.log(product.product, "226")} */}
-              <ProductDetail>
-                <Image src={item.imageUrl} />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b>
-                    {item.name}
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b>
-                    {item._id}
-                  </ProductId>
-                  <ProductColor />
-                  <ProductSize>
-                    <b>Size:</b> s
-                  </ProductSize>
-                  <p>{item.qty}</p>
-                  {/* {console.log(product.product._id, "242")} */}
-                  {/* <Button onClick={() => removeHandle(product.product._id)}>
+          <Info>
+            {cart.map((item) => (
+              <Product>
+                {/* {console.log(product.product, "226")} */}
+                <ProductDetail>
+                  <Image src={item.imageUrl} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b>
+                      {item.name}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b>
+                      {item._id}
+                    </ProductId>
+                    <ProductColor />
+                    <ProductSize>
+                      <b>Size:</b> s
+                    </ProductSize>
+                    <p>{item.qty}</p>
+                    {/* {console.log(product.product._id, "242")} */}
+                    {/* <Button onClick={() => removeHandle(product.product._id)}>
                     remove from wishlist
                   </Button> */}
-                  {/* <Button onClick={() => handleMoveToCart(product.product)}>
+                    {/* <Button onClick={() => handleMoveToCart(product.product)}>
                       MOVE TO CART
                     </Button> */}
 
-                  {/* <Button onClick={() => removeHandle(product.product)}>
+                    {/* <Button onClick={() => removeHandle(product.product)}>
                       remove from CART
                     </Button> */}
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
-                  {/* <ProductAmount>{product.qty}</ProductAmount> */}
-                  {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
-                </ProductAmountContainer>
-                <ProductPrice>{item.price}</ProductPrice>
-              </PriceDetail>
-            </Product>
-          ))}
-          <Summary>
-            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-            {/* <SummaryItem> 
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
+                    {/* <ProductAmount>{product.qty}</ProductAmount> */}
+                    {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
+                  </ProductAmountContainer>
+                  <ProductPrice>{item.price}</ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
+            <Summary>
+              <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+              {/* <SummaryItem> 
               <SummaryItemText>Subtotal</SummaryItemText>
               <SummaryItemPrice>$ {total}</SummaryItemPrice>
             </SummaryItem>
@@ -296,11 +292,11 @@ const Cart = () => {
               <SummaryItemText>Shipping Discount</SummaryItemText>
               <SummaryItemPrice>$ -5.90</SummaryItemPrice>
             </SummaryItem> */}
-            <SummaryItem type="total">
-              <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>${total}</SummaryItemPrice>
-            </SummaryItem>
-            {/* <StripeCheckout
+              <SummaryItem type="total">
+                <SummaryItemText>Total</SummaryItemText>
+                <SummaryItemPrice>${total}</SummaryItemPrice>
+              </SummaryItem>
+              {/* <StripeCheckout
               name="Lama Shop"
               image="https://avatars.githubusercontent.com/u/1486366?v=4"
               billingAddress
@@ -310,11 +306,12 @@ const Cart = () => {
               token={onToken}
               stripeKey={KEY}
             > */}
-            <Button disabled={cart.length === 0} onClick={checkoutHandler}>
-              CHECKOUT NOW
-            </Button>
-            {/* </StripeCheckout> */}
-          </Summary>
+              <Button disabled={cart.length === 0} onClick={checkoutHandler}>
+                CHECKOUT NOW
+              </Button>
+              {/* </StripeCheckout> */}
+            </Summary>
+          </Info>
         </Bottom>
       </Wrapper>
       <Footer />
