@@ -23,7 +23,7 @@ app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/orders", orderRouter);
 
-const port = 8000;
+const port = process.env.PORT || 443;
 
 app.listen(port, () => {
   console.log(`listening on ${port}`);

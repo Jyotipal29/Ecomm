@@ -10,6 +10,6 @@ const {
 router.get("/", protect, getCart);
 router.post("/add", protect, addToCart);
 //login
-router.delete("/remove", removeFromCart);
+router.delete("/:id", protect, removeFromCart);
 
 module.exports = router;

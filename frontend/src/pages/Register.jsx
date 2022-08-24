@@ -63,7 +63,15 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState("");
   const navigate = useNavigate();
+
+  const validate = (values) => {
+    const errors = {};
+    const regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+  };
+
+
 
   const handleRegister = async (e) => {
     e.preventDefault();

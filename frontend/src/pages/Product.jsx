@@ -166,27 +166,34 @@ const Product = () => {
     getProduct();
   }, [id]);
 
-  const handleCart = async ({ _id, qty, price, imageUrl, name, InStock }) => {
+  const handleCart = async (product) => {
+    // {
+    //   _id, qty, price, imageUrl, name, InStock;
+    // }
     // console.log(qty, price, _id, name, imageUrl, InStock);
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    if (token) {
-      const { data } = await axios.post(`${api}/carts/add`, config, {
-        name,
-        _id,
-        price,
-        qty,
-        imageUrl,
-        InStock,
-      });
-      console.log(data, "data");
-    } else {
-      console.log("no token");
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // };
+    // if (token) {
+    //   const { data } = await axios.post(
+    //     `${api}/carts/add`,
+    //     {
+    //       name,
+    //       _id,
+    //       price,
+    //       qty,
+    //       imageUrl,
+    //       InStock,
+    //     },
+    //     config
+    //   );
+    //   console.log(data, "data");
+    // } else {
+    //   console.log("no token");
+    // }
 
     try {
       if (isAuth) {
@@ -203,20 +210,20 @@ const Product = () => {
         //     InStock: data.InStock,
         //   },
         // });
-        // const config = {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // };
-        // const { data } = await axios.post(`${api}/carts/add`, config, {
-        //   name,
-        //   _id,
-        //   price,
-        //   qty,
-        //   imageUrl,
-        //   InStock,
-        // });
-        // console.log(data, "data");
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await axios.post(
+          `${api}/carts/add`,
+          {
+            product,
+          },
+          config
+        );
+        // dispatch({ type: "ADD_CART", payload: data });
+        console.log(data, "data");
       } else {
         navigate("/login");
       }
@@ -224,6 +231,9 @@ const Product = () => {
       setError(error);
     }
   };
+
+
+
   const handleWish = async () => {
     console.log("clicked");
     try {

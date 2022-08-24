@@ -67,7 +67,27 @@ const addToCart = expressAsyncHandler(async (req, res) => {
   });
 });
 
-const removeFromCart = expressAsyncHandler(async (req, res) => {});
+const removeFromCart = expressAsyncHandler(async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  if (id) {
+    Cart.updateOne(
+      { user: req.user._id },
+      {
+        $pull: {
+          cartItems: {
+            product: id,
+          },
+        },
+      }
+    ).exec((error, result) => {
+      if (error) return res.status(400).json({ error });
+      if (result) {
+        res.status(202).json({ user: req.user._id });
+      }
+    });
+  }
+});
 
 module.exports = {
   addToCart,

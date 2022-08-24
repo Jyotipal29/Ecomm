@@ -7,14 +7,15 @@ const CartReducer = (state, action) => {
       };
     case "ADD_CART":
       const item = action.payload;
-      const existItem = state.cart?.find((x) => x.product === item.product);
+      const existItem = state.cart?.find((x) => x._id === item._id);
       const cart = existItem
-        ? state.cart?.map((x) => (x.product === existItem.product ? item : x))
+        ? state.cart?.map((x) => (x._id === existItem._id ? item : x))
         : [...state.cart, item];
       return {
         ...state,
         cart,
       };
+    
 
     case "REMOVE_FROM_CART":
       const cartVal = state.cart?.filter((c) => c.product !== action.payload);
