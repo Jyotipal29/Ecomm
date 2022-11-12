@@ -15,37 +15,34 @@ const CartReducer = (state, action) => {
         ...state,
         cart,
       };
-    
 
     case "REMOVE_FROM_CART":
-      const cartVal = state.cart?.filter((c) => c.product !== action.payload);
-      localStorage.setItem("cart", JSON.stringify(cartVal));
-
       return {
         ...state,
-        cart: cartVal,
+        cart: state.cart?.filter(
+          (item) => item.product !== action.payload.product
+        ),
       };
-    case "ADD_WISH":
+    case "GET_WISHLIST":
+      return {
+        ...state,
+        wish: action.payload,
+      };
+    case "ADD_WISHLIST":
       const itemw = action.payload;
       const existItemw = state.wish?.find((x) => x.product === itemw.product);
       const wish = existItemw
         ? state.wish.map((x) => (x.product === existItemw.product ? itemw : x))
         : [...state.wish, itemw];
-      localStorage.setItem("wish", JSON.stringify(wish));
 
       return {
         ...state,
         wish,
       };
-    case "REMOVE_FROM_WISH":
-      const wishVal = state.wish?.filter(
-        (c) => c.product._id !== action.payload
-      );
-      localStorage.setItem("wish", JSON.stringify(wishVal));
-
+    case "REMOVE_FROM_WISHLIST":
       return {
         ...state,
-        wish: wishVal,
+        wish: state.wish?.filter((c) => c.product !== action.payload.product),
       };
     case "SAVE_ADDRESS":
       return {
@@ -80,8 +77,8 @@ const CartReducer = (state, action) => {
       return {
         ...state,
         user: null,
-        cart: [],
-        wish: [],
+        isAuth: false,
+        token: null,
         shippingAddress: {},
       };
     case "INC_QTY":

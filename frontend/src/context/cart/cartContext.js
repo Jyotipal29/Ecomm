@@ -16,7 +16,7 @@ export const CartProvider = ({ children }) => {
     user: JSON.parse(localStorage.getItem("user") || null) || [],
     shippingAddress:
       JSON.parse(localStorage.getItem("shippingAddress") || null) || [],
-    wish: JSON.parse(localStorage.getItem("wish") || null) || [],
+    wish: [],
     cart: [],
   });
   const [error, setError] = useState(" ");

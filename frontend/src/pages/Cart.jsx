@@ -162,7 +162,7 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const Cart = () => {
-  // const [quantity, setQuantity] = useState(1);
+  const [movedToWish, setMovedToWish] = useState(false);
   const navigate = useNavigate();
   const {
     state: { cart, wish },
@@ -202,12 +202,42 @@ const Cart = () => {
   // console.log("157", wish);
 
   const removeHandle = async (id) => {
-    // console.log("168", id);
+    console.log(id, "id");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.delete(`${api}/carts/${id}`, config);
+    console.log(data, "data");
 
-    dispatch({ type: "REMOVE_FROM_CART", payload: id });
-    // localStorage.setItem("cart", JSON.stringify(cartVal));
+    dispatch({ type: "REMOVE_FROM_CART", payload: data });
   };
-
+  const moveToWish = async ({ _id, price, qty, imageUrl }) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    if (moveToWish) {
+      await axios.post(
+        `${api}/wish/add`,
+        {
+          wishItems: {
+            product: _id,
+            price: price,
+            qty: qty,
+            imageUrl: imageUrl,
+          },
+        },
+        config
+      );
+      setMovedToWish(true);
+    } else {
+      await axios.delete(`${api}/carts/${_id}`, config);
+      setMovedToWish(false);
+    }
+  };
   const checkoutHandler = () => {
     navigate("/address");
   };
@@ -236,48 +266,52 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            {cart.map((item) => (
-              <Product>
-                {/* {console.log(product.product, "226")} */}
-                <ProductDetail>
-                  <Image src={item.imageUrl} />
-                  <Details>
-                    <ProductName>
-                      <b>Product:</b>
-                      {item.name}
-                    </ProductName>
-                    <ProductId>
-                      <b>ID:</b>
-                      {item._id}
-                    </ProductId>
-                    <ProductColor />
-                    <ProductSize>
-                      <b>Size:</b> s
-                    </ProductSize>
-                    <p>{item.qty}</p>
-                    {/* {console.log(product.product._id, "242")} */}
-                    {/* <Button onClick={() => removeHandle(product.product._id)}>
+            {cart &&
+              cart.map((item) => (
+                <Product>
+                  {console.log(item, "226")}
+                  <ProductDetail>
+                    <Image src={item.imageUrl} />
+                    <Details>
+                      <ProductName>
+                        <b>Product:</b>
+                        {item.product}
+                      </ProductName>
+                      <ProductId>
+                        <b>ID:</b>
+                        {item._id}
+                      </ProductId>
+                      <ProductColor />
+                      <ProductSize>
+                        <b>Size:</b> s
+                      </ProductSize>
+                      <p>{item.qty}</p>
+                      {/* {console.log(product.product._id, "242")} */}
+                      {/* <Button onClick={() => removeHandle(product.product._id)}>
                     remove from wishlist
                   </Button> */}
-                    {/* <Button onClick={() => handleMoveToCart(product.product)}>
+                      {/* <Button onClick={() => handleMoveToCart(product.product)}>
                       MOVE TO CART
                     </Button> */}
 
-                    {/* <Button onClick={() => removeHandle(product.product)}>
-                      remove from CART
-                    </Button> */}
-                  </Details>
-                </ProductDetail>
-                <PriceDetail>
-                  <ProductAmountContainer>
-                    {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
-                    {/* <ProductAmount>{product.qty}</ProductAmount> */}
-                    {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
-                  </ProductAmountContainer>
-                  <ProductPrice>{item.price}</ProductPrice>
-                </PriceDetail>
-              </Product>
-            ))}
+                      <Button onClick={() => removeHandle(item.product)}>
+                        remove from CART
+                      </Button>
+                      <Button onClick={() => moveToWish(item)}>
+                        move to wishlist
+                      </Button>
+                    </Details>
+                  </ProductDetail>
+                  <PriceDetail>
+                    <ProductAmountContainer>
+                      {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
+                      {/* <ProductAmount>{product.qty}</ProductAmount> */}
+                      {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
+                    </ProductAmountContainer>
+                    <ProductPrice>{item.price}</ProductPrice>
+                  </PriceDetail>
+                </Product>
+              ))}
             <Summary>
               <SummaryTitle>ORDER SUMMARY</SummaryTitle>
               {/* <SummaryItem> 

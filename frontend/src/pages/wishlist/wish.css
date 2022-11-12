@@ -1,0 +1,16 @@
+.wish-container{
+    margin:60px auto;
+    max-width:1150px;
+    padding-left: 25px;
+    padding-right:25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:flex-start;
+}
+.remove-wish{
+    position: absolute;
+    top:0px;
+    right:10px;
+    font-size: 30px;
+    color:#3b82f6;
+}

@@ -1,0 +1,67 @@
+/* 
+prim color: #3b82f6;
+sec color :#93c5fd
+
+*/
+
+
+.nav-container{
+max-width: 1300px;
+margin:0 auto;
+padding-left:25px;
+padding-right:25px;
+}
+.nav-nav{
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+align-items: center;
+
+}
+.nav-logo{
+color:#3b82f6;
+font-size: 35px;
+font-weight: bold;
+font-style: italic;
+font-family:'Poppins';
+padding:10px 20px;
+cursor: pointer;
+
+}
+.nav-nav .nav-pills{
+    display: flex;
+padding:10px 20px;
+height: 100%;
+align-items: center;
+
+}
+.nav-nav .nav-pills li{
+    margin-left:30px;
+font-family:'Poppins';
+font-size: 20px;
+cursor: pointer;
+}
+.menu{
+    display: none;
+}
+
+@media (max-width:600px){
+    .nav-nav .nav-pills{
+        position: absolute;
+        top:70px;
+        left:0;
+        display: block;
+        background-color:#3b82f6 ;
+        width:100%;
+        overflow: hidden;
+    }
+    .nav-nav .nav-pills li{
+        padding:10px;
+        color:white;
+    }
+    .menu{
+        display: block;
+        color:#3b82f6;
+        cursor: pointer;
+    }
+}

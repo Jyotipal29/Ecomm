@@ -2,7 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const Cart = require("../model/cartModel");
 
 const getCart = expressAsyncHandler(async (req, res) => {
-  const carts = await Cart.find();
+  const carts = await Cart.find({ user: req.user._id });
   if (carts) {
     res.status(201).json({ carts });
   } else {
@@ -16,6 +16,7 @@ const addToCart = expressAsyncHandler(async (req, res) => {
     if (cart) {
       //if cart already exist then update the qty
       const product = req.body.cartItems.product;
+      console.log(product, "product");
       const item = cart.cartItems.find((c) => c.product == product);
       if (item) {
         Cart.findOneAndUpdate(
@@ -83,7 +84,7 @@ const removeFromCart = expressAsyncHandler(async (req, res) => {
     ).exec((error, result) => {
       if (error) return res.status(400).json({ error });
       if (result) {
-        res.status(202).json({ user: req.user._id });
+        res.status(202).json({ product: id });
       }
     });
   }

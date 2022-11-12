@@ -142,15 +142,9 @@ const Product = () => {
     productState: { product },
     productDispatch,
   } = useProduct();
-  // console.log("product", product);
   const navigate = useNavigate();
   const id = location.pathname.split("/")[2];
-  // const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  // const [color, setColor] = useState(" ");
-  // const [size, setSize] = useState(" ");
-
-  // console.log("cart ek", cart);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -166,50 +160,9 @@ const Product = () => {
     getProduct();
   }, [id]);
 
-  const handleCart = async (product) => {
-    // {
-    //   _id, qty, price, imageUrl, name, InStock;
-    // }
-    // console.log(qty, price, _id, name, imageUrl, InStock);
-
-    // const config = {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // };
-    // if (token) {
-    //   const { data } = await axios.post(
-    //     `${api}/carts/add`,
-    //     {
-    //       name,
-    //       _id,
-    //       price,
-    //       qty,
-    //       imageUrl,
-    //       InStock,
-    //     },
-    //     config
-    //   );
-    //   console.log(data, "data");
-    // } else {
-    //   console.log("no token");
-    // }
-
+  const handleCart = async ({ _id, qty, price, imageUrl }) => {
     try {
       if (isAuth) {
-        // const { data } = await axios.get(`${api}/products/find/${id}`);
-        // console.log("174", data);
-        // dispatch({
-        //   type: "ADD_CART",
-        //   payload: {
-        //     product: data._id,
-        //     name: data.name,
-        //     imageUrl: data.imageUrl,
-        //     price: data.price,
-        //     qty: quantity,
-        //     InStock: data.InStock,
-        //   },
-        // });
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -218,11 +171,16 @@ const Product = () => {
         const { data } = await axios.post(
           `${api}/carts/add`,
           {
-            product,
+            cartItems: {
+              product: _id,
+              price: price,
+              qty: qty,
+              imageUrl: imageUrl,
+            },
           },
           config
         );
-        // dispatch({ type: "ADD_CART", payload: data });
+        dispatch({ type: "ADD_CART", payload: data });
         console.log(data, "data");
       } else {
         navigate("/login");
@@ -232,43 +190,33 @@ const Product = () => {
     }
   };
 
+  const handleWish = async ({ _id, price, qty, imageUrl }) => {
+    console.log(_id, price, qty, imageUrl, "product");
 
-
-  const handleWish = async () => {
-    console.log("clicked");
-    try {
-      if (isAuth) {
-        const { data } = await axios.get(`${api}/products/find/${id}`);
-        console.log("185", data);
-        dispatch({
-          type: "ADD_WISH",
-          payload: {
-            product: data._id,
-            name: data.name,
-            imageUrl: data.imageUrl,
-            price: data.price,
-            qty: quantity,
-            // InStock,
+    if (isAuth) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `${api}/wish/add`,
+        {
+          wishItems: {
+            product: _id,
+            price: price,
+            qty: qty,
+            imageUrl: imageUrl,
           },
-        });
-        // localStorage.setItem("wish", JSON.stringify(wishVal));
-      } else {
-        navigate("/login");
-      }
-    } catch (error) {
-      setError(error);
+        },
+        config
+      );
+      dispatch({ type: "ADD_WISHLIST", payload: data });
+      console.log(data, "data");
+    } else {
+      navigate("/login");
     }
   };
-  // const handleInc = (product) => {
-  //   console.log(product);
-  //   dispatch({ type: "INC_QTY", payload: product });
-  //   console.log("inc");
-  // };
-  // const handleDec = (product) => {
-  //   console.log(product);
-
-  //   dispatch({ type: "DEC_QTY", payload: product });
-  // };
 
   return (
     <Container>
@@ -290,43 +238,7 @@ const Product = () => {
               <Desc>4 days Delivery</Desc>
             )}
 
-            {/* <FilterContainer>
-            <Filter>
-              <FilterTitle>
-                {product.color?.map((c) => (
-                  <FilterColor color={c} />
-                ))}
-              </FilterTitle>
-            </Filter>
-            <Filter>
-              <FilterTitle>size</FilterTitle>
-              <FilterSize>
-                {product.size?.map((s) => (
-                  <FilterSizeOption>{s}</FilterSizeOption>
-                ))}
-              </FilterSize>
-            </Filter>
-          </FilterContainer> */}
             <AmountContainer>
-              {/* {console.log(product.qty)} */}
-              {/* <Select
-                value={product.InStock}
-                onChange={(e) =>
-                  dispatch({
-                    type: "CHANGE_CART_QTY",
-                    payload: {
-                      id: product.product,
-                      qty: e.target.value,
-                    },
-                  })
-                }
-              >
-                {[...Array(product.InStock).keys()].map((x) => (
-                  <Option key={x + 1} value={x + 1}>
-                    {x + 1}
-                  </Option>
-                ))}
-              </Select> */}
               <button
                 onClick={() => setQuantity(quantity + 1)}
                 disabled={product.qty === product.InStock}
@@ -349,7 +261,9 @@ const Product = () => {
               >
                 {!product.InStock ? "Out of stock" : " ADD TO CART"}
               </Button>
-              <Button onClick={handleWish}>ADD TO wishlist</Button>
+              <Button onClick={() => handleWish(product)}>
+                ADD TO wishlist
+              </Button>
             </AddContainer>
           </InfoContainer>
         </Wrapper>

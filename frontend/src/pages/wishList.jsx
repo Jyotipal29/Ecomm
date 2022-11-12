@@ -11,6 +11,7 @@ import { useAuth } from "../context/auth/authContext";
 import axios from "axios";
 import { api } from "../constants/api";
 import { useWish } from "../context/wishlist/wishContext";
+import { useEffect, useState } from "react";
 const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
@@ -154,64 +155,66 @@ const Button = styled.button`
 `;
 
 const WishList = () => {
+  const [moveToCart, setMovedToCart] = useState(false);
+
   const {
-    state: { cart, wish },
+    state: { cart, wish, user },
     dispatch,
     token,
     isAuth,
     error,
     setError,
   } = useCart();
+  console.log(wish, "wish");
+  useEffect(() => {
+    const fetchVideo = async () => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
 
-  // const { isAuth, setIsAuth } = useAuth();
-  // const {
-  //   state: { wish },
-  //   wishDispatch,
-  // } = useWish();
-  console.log("167", wish);
-  console.log(wish);
-  const incHandle = (id) => {
-    dispatch({ type: "INC_QTY", payload: id });
-  };
-  const decHandle = (id) => {
-    dispatch({ type: "DEC_QTY", payload: id });
-  };
+      const { data } = await axios.get(`${api}/wish/`, config);
+      const dataM = data.wishs[0].wishItems;
+
+      console.log(dataM, "wishdata");
+      dispatch({ type: "GET_WISHLIST", payload: dataM });
+    };
+    fetchVideo();
+  }, []);
   const removeHandle = async (id) => {
-    console.log(id, "176");
-    try {
-      dispatch({ type: "REMOVE_FROM_WISH", payload: id });
-      // localStorage.setItem("wish", JSON.stringify(wishVal));
-    } catch (error) {
-      setError(error);
-    }
+    // console.log(id, "id");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.delete(`${api}/wish/${id}`, config);
+    console.log(data, "data");
+
+    dispatch({ type: "REMOVE_FROM_WISHLIST", payload: data });
+  };
+  const handleMoveToCart = async ({ _id, price, imageUrl, qty }) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    await axios.post(
+      `${api}/carts/add`,
+      {
+        cartItems: {
+          product: _id,
+          price: price,
+          qty: qty,
+          imageUrl: imageUrl,
+        },
+      },
+      config
+    );
   };
 
-  // const handleCart = async (id) => {
-  //   try {
-  //     if (isAuth) {
-  //       const { data } = await axios.get(`${api}/products/find/${id}`);
-  //       // console.log(data);
-  //       dispatch({
-  //         type: "ADD_CART",
-  //         payload: {
-  //           product: data._id,
-  //           name: data.name,
-  //           imageUrl: data.imageUrl,
-  //           price: data.price,
-  //           // qty,
-  //         },
-  //       });
-  //       localStorage.setItem("cart", JSON.stringify(cart));
-  //     } else {
-  //       // navigate("/login");
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  // const handleMoveToCart = (id) => {
-  //   wishDispatch({ type: "MOVE_TO_CART", payload: id });
-  // };
   return (
     <Container>
       <Announcement />
@@ -234,44 +237,36 @@ const WishList = () => {
               {wish &&
                 wish.map((product) => (
                   <Product>
-                    {console.log(product.product, "226")}
                     <ProductDetail>
                       <Image src={product.imageUrl} />
                       <Details>
                         <ProductName>
                           <b>Product:</b>
-                          {product.name}
+                          {product.product}
                         </ProductName>
                         <ProductId>
                           <b>ID:</b>
-                          {product.product._id}
+                          {product._id}
                         </ProductId>
                         <ProductColor />
                         <ProductSize>
                           <b>Size:</b> s
                         </ProductSize>
                         <p>{product.qty}</p>
-                        {console.log(product.product._id, "242")}
-                        <Button
-                          onClick={() => removeHandle(product.product._id)}
-                        >
-                          remove from wishlist
-                        </Button>
-                        {/* <Button onClick={() => handleMoveToCart(product.product)}>
-                      MOVE TO CART
-                    </Button> */}
-
-                        {/* <Button onClick={() => removeHandle(product.product)}>
-                      remove from CART
-                    </Button> */}
+                        <div>
+                          <Button onClick={() => removeHandle(product.product)}>
+                            remove from wishlist
+                          </Button>
+                          <br />
+                          <Button onClick={() => handleMoveToCart(product)}>
+                            MOVE TO CART
+                          </Button>
+                        </div>
                       </Details>
                     </ProductDetail>
+
                     <PriceDetail>
-                      <ProductAmountContainer>
-                        {/* <AddIcon onClick={(id) => incHandle(product._id)} /> */}
-                        {/* <ProductAmount>{product.qty}</ProductAmount> */}
-                        {/* <RemoveIcon onClick={(id) => decHandle(product._id)} /> */}
-                      </ProductAmountContainer>
+                      <ProductAmountContainer></ProductAmountContainer>
                       <ProductPrice>{product.price}</ProductPrice>
                     </PriceDetail>
                   </Product>
