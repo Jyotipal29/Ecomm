@@ -12,7 +12,6 @@ const cartSchema = new mongoose.Schema({
         ref: "Product",
         required: true,
       },
-
       qty: {
         type: Number,
         require: true,
@@ -23,6 +22,18 @@ const cartSchema = new mongoose.Schema({
       },
       imageUrl: {
         type: String,
+        required: true,
+      },
+      InStock: {
+        type: Number,
+        // required: true,
+      },
+      fastDelivery: {
+        type: Boolean,
+        // required: true,
+      },
+      name: {
+        type: "String",
         required: true,
       },
     },

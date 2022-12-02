@@ -37,21 +37,100 @@ const ProductDetails = () => {
     getProduct();
   }, [id]);
   console.log(product, "product");
+  const cartHandler = async (product) => {
+    try {
+      if (isAuth) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await axios.post(
+          `${api}/carts/add`,
+          {
+            cartItems: {
+              product: product._id,
+              price: product.price,
+              imageUrl: product.imageUrl,
+              name: product.name,
+              qty: product.qty,
+            },
+          },
+          config
+        );
+        dispatch({ type: "ADD_CART", payload: data });
+
+        console.log(data, "data");
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      setError(error);
+    }
+  };
+
+  const wishHandler = async (product) => {
+    if (isAuth) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `${api}/wish/add`,
+        {
+          wishItems: {
+            product: product._id,
+            price: product.price,
+            imageUrl: product.imageUrl,
+            name: product.name,
+            qty: product.qty,
+          },
+        },
+        config
+      );
+      dispatch({ type: "ADD_WISHLIST", payload: data });
+      console.log(data, "data");
+    } else {
+      navigate("/login");
+    }
+  };
+  const plusHandler = (product) => {
+    console.log(product, "product");
+  };
+  const minusHandler = (product) => {
+    console.log(product, "product");
+  };
+
   return (
     <div className="single-product-container">
-      <div className="single-product-card">
-        <img src={product.imageUrl} className="single-product-img" />
-        <div className="single-product-info">
-          <h4 className="single-product-name">{product.name}</h4>
-          <p className="single-product-desc">{product.description}</p>
-          <p className="single-product-price">Rs.{product.price}</p>
+      {product && (
+        <>
+          <div className="single-product-card">
+            <img src={product.imageUrl} className="single-product-img" />
+            <div className="single-product-info">
+              <h4 className="single-product-name">{product.name}</h4>
+              <p className="single-product-desc">{product.description}</p>
+              <p className="single-product-price">Rs.{product.price}</p>
 
-          <div className="single-product-btn">
-            <button className="pr-cart-btn">Add to cart</button>
-            <button className="pr-wish-btn">Add to wishlist</button>
+              <div className="single-product-btn">
+                <button
+                  className="pr-cart-btn"
+                  onClick={() => cartHandler(product)}
+                >
+                  Add to cart
+                </button>
+                <button
+                  className="pr-wish-btn"
+                  onClick={() => wishHandler(product)}
+                >
+                  Add to wishlist
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

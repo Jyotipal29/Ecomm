@@ -9,7 +9,7 @@ sec color :#93c5fd
 .product-card{
 cursor: pointer;
     flex-basis: 20%;
-    margin:15px;
+    margin:20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -19,7 +19,7 @@ cursor: pointer;
 }
 .product-img{
     width:200px;
-    height: 150px;
+    height: 200px;
     text-align: center;
     margin: 0 auto;
     display: block;

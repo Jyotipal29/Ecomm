@@ -6,16 +6,26 @@ sec color :#93c5fd
 
 
 .nav-container{
+    
+position: fixed;
+top:0;
+right:0;
+left:0;
+z-index: 1300;
 max-width: 1300px;
 margin:0 auto;
-padding-left:25px;
-padding-right:25px;
+
+
 }
 .nav-nav{
-    height: 10vh;
+   
     display: flex;
+    height: 10vh;
     justify-content: space-between;
 align-items: center;
+
+width:100%;
+padding-right:30px;
 
 }
 .nav-logo{
@@ -45,8 +55,14 @@ cursor: pointer;
     display: none;
 }
 
-@media (max-width:600px){
+@media (max-width:720px){
+    .nav-container{
+        margin-right:30px;
+    }
     .nav-nav .nav-pills{
+        display: none;
+    }
+    .nav-nav .nav-pills-mobile{
         position: absolute;
         top:70px;
         left:0;
@@ -55,6 +71,11 @@ cursor: pointer;
         width:100%;
         overflow: hidden;
     }
+.nav-nav .nav-pills-mobile li{
+    color:white;
+        padding:10px;
+font-weight: 700;
+}
     .nav-nav .nav-pills li{
         padding:10px;
         color:white;

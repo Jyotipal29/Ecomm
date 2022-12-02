@@ -34,6 +34,8 @@ const Products = ({ item }) => {
               product: item._id,
               price: item.price,
               imageUrl: item.imageUrl,
+              name: item.name,
+              qty: item.qty,
             },
           },
           config
@@ -65,6 +67,8 @@ const Products = ({ item }) => {
             product: item._id,
             price: item.price,
             imageUrl: item.imageUrl,
+            name: item.name,
+            qty: item.qty,
           },
         },
         config

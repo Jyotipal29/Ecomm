@@ -21,7 +21,7 @@ const Banner = () => {
             Shop Now
           </Link>
 
-          <ArrowForwardOutlinedIcon className="banner-ar" />
+          {/* <ArrowForwardOutlinedIcon className="banner-ar" /> */}
         </button>
       </div>
     </div>

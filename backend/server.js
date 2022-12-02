@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
+const errorHandler = require("./middelwear/error");
 
 const connectDB = require("./config/db");
 const authRouter = require("./routes/authRouter");
@@ -24,6 +25,8 @@ app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/wish", wishRouter);
 app.use("/api/orders", orderRouter);
+
+app.use(errorHandler);
 
 const port = process.env.PORT || 443;
 

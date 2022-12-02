@@ -17,7 +17,7 @@ const Cart = () => {
     token,
   } = useCart();
   console.log(cart, "cart");
-  const [total, setTotal] = useState();
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +27,7 @@ const Cart = () => {
         },
       };
       const { data } = await axios.get(`${api}/carts/`, config);
+      console.log(data, "data");
       const dataM = data.carts[0].cartItems;
       console.log(dataM);
       dispatch({ type: "GET_CART", payload: dataM });
@@ -40,6 +41,27 @@ const Cart = () => {
       );
     }
   }, [cart]);
+  const removeHandler = async (id) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.delete(`${api}/carts/${id}`, config);
+    console.log(data, "data");
+
+    dispatch({ type: "REMOVE_FROM_CART", payload: data });
+  };
+  const incQtyHandler = (item) => {
+    console.log(item.qty, "item");
+
+    dispatch({ type: "INC_QTY", payload: item });
+  };
+  const decQtyHandler = (item) => {
+    console.log(item.qty, "item");
+    dispatch({ type: "DEC_QTY", payload: item });
+  };
+
   return (
     <div className="cart-container">
       <table>
@@ -59,15 +81,17 @@ const Cart = () => {
                     <p>{item.name}</p>
                     <small>{item.price}</small>
                     <br />
-                    <a>remove</a>
+                    <a onClick={() => removeHandler(item.product)}>remove</a>
                   </div>
                 </div>
               </td>
 
               <td>
-                <input type="number" value="1" />
+                <button onClick={() => incQtyHandler(item)}>+</button>
+                <small>{item.qty}</small>
+                <button onClick={() => decQtyHandler(item)}>-</button>
               </td>
-              <td>$50.00</td>
+              <td>{item.price * item.qty}</td>
             </tr>
           ))}
       </table>
@@ -75,15 +99,15 @@ const Cart = () => {
         <table>
           <tr>
             <td>Subtotal</td>
-            <td>$200</td>
+            <td>{total}</td>
           </tr>
           <tr>
             <td>Tax</td>
-            <td>$30</td>
+            <td>30</td>
           </tr>
           <tr>
             <td>total</td>
-            <td>$230</td>
+            <td>{total + 30}</td>
           </tr>
         </table>
       </div>

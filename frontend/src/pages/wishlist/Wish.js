@@ -26,6 +26,7 @@ const Wish = () => {
       };
 
       const { data } = await axios.get(`${api}/wish/`, config);
+      console.log(data, "data");
       const dataM = data.wishs[0].wishItems;
 
       console.log(dataM, "wishdata");
@@ -33,14 +34,30 @@ const Wish = () => {
     };
     fetchVideo();
   }, []);
+  const removeHandler = async (id) => {
+    console.log(id, "wish");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.delete(`${api}/wish/${id}`, config);
+    console.log(data, "data");
 
+    dispatch({ type: "REMOVE_FROM_WISHLIST", payload: data });
+  };
   return (
     <div className="wish-container">
       {wish &&
         wish.map((item) => (
           <div className="product-card">
             <img src={item.imageUrl} className="product-img" />
-            <div className="remove-wish">x</div>
+            <div
+              className="remove-wish"
+              onClick={() => removeHandler(item.product)}
+            >
+              x
+            </div>
             <h3 className="product-brand">{item.name}</h3>
             <p className="product-name">Dress for women</p>
             <h6 className="product-price">{item.price}</h6>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./navbar.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
@@ -9,10 +8,10 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
-import { useAuth } from "../../context/auth/authContext";
+// import { useAuth } from "../../context/auth/authContext";
 // import { logoutCall } from "../../context/apiCalls";
 import { CartProvider, useCart } from "../../context/cart/cartContext";
-import { useWish } from "../../context/wishlist/wishContext";
+// import { useWish } from "../../context/wishlist/wishContext";
 import { useProduct } from "../../context/product/productContext";
 
 const Navbar = ({ cat }) => {
@@ -23,7 +22,6 @@ const Navbar = ({ cat }) => {
     state: { user, wish, cart },
     dispatch,
   } = useCart();
-  console.log(user.username);
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem("user");
@@ -32,9 +30,9 @@ const Navbar = ({ cat }) => {
     dispatch({ type: "LOGOUT" });
     navigate("/login");
   };
-  const style = {
-    maxHeight: openMenu ? "300px" : "0px",
-  };
+  // const style = {
+  //   maxHeight: openMenu ? "300px" : "0px",
+  // };
   return (
     <div className="nav-container">
       <div className="nav-nav">
@@ -43,16 +41,16 @@ const Navbar = ({ cat }) => {
             ShopIt
           </Link>
         </div>
-        <ul className="nav-pills" style={style}>
-          <Link to="/" style={{ color: "inherit" }}>
+        <ul className={openMenu ? "nav-pills-mobile" : "nav-pills"}>
+          {/* <Link to="/" style={{ color: "inherit" }}>
             <li>Home</li>
-          </Link>
+          </Link> */}
 
           <Link to="/products" style={{ color: "inherit" }}>
             <li> Products</li>
           </Link>
 
-          {user.username ? (
+          {user ? (
             <>
               <Link to="/cart" style={{ color: "inherit" }}>
                 <li>
@@ -67,7 +65,7 @@ const Navbar = ({ cat }) => {
 
               <li onClick={handleLogout}>
                 <LogoutOutlinedIcon />
-                <p>{user.username}</p>
+                <small>{user.username.charAt(0)}</small>
               </li>
             </>
           ) : (

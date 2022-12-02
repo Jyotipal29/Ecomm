@@ -12,6 +12,7 @@ const ProductList = () => {
     productDispatch,
   } = useProduct();
   const { error, setError } = useCart();
+  console.log(products, "products");
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -59,6 +60,8 @@ const ProductList = () => {
               }}
             />
           </div>
+        </div>
+        <div className="prod-filter-row">
           <select
             className="prod-filter-select"
             onChange={(e) =>
@@ -82,7 +85,7 @@ const ProductList = () => {
             <option value="FILTER_BY_STOCK">In stock</option>
           </select>
 
-          <button
+          {/* <button
             class="btn-clear"
             onClick={() =>
               productDispatch({
@@ -91,7 +94,7 @@ const ProductList = () => {
             }
           >
             clear
-          </button>
+          </button> */}
         </div>
         <div className="product-row">
           {transformProducts() &&

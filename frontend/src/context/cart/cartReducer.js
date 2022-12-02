@@ -84,15 +84,13 @@ const CartReducer = (state, action) => {
     case "INC_QTY":
       return {
         ...state,
-        cart: state.cart.map((c) =>
-          c.id === action.payload._id ? { ...c, qty: c.qty + 1 } : c
-        ),
+        cart: state.cart.map((it) => it._id === action.payload._id ? {...it, qty:it.qty+1}:it) 
       };
     case "DEC_QTY":
       return {
         ...state,
-        cart: state.cart.map((c) =>
-          c.id === action.payload._id ? { ...c, qty: c.qty - 1 } : c
+        cart: state.cart.map((it) =>
+          it._id === action.payload._id ? { ...it, qty: it.qty - 1 } : it
         ),
       };
     default:
@@ -100,3 +98,12 @@ const CartReducer = (state, action) => {
   }
 };
 export default CartReducer;
+// state.cart.map((c) =>
+          // c.id === action.payload._id ? { ...c, qty: c.qty + 1 } : c
+        // ),
+
+
+
+        // state.cart.map((c) =>
+          // c.id === action.payload._id ? { ...c, qty: c.qty - 1 } : c
+        // ),
