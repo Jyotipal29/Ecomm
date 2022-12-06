@@ -16,7 +16,7 @@ const Cart = () => {
     setError,
     token,
   } = useCart();
-  console.log(cart, "cart");
+  // console.log(cart, "cart");
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Cart = () => {
         },
       };
       const { data } = await axios.get(`${api}/carts/`, config);
-      console.log(data, "data");
+      // console.log(data, "data");
       const dataM = data.carts[0].cartItems;
       console.log(dataM);
       dispatch({ type: "GET_CART", payload: dataM });
@@ -53,12 +53,12 @@ const Cart = () => {
     dispatch({ type: "REMOVE_FROM_CART", payload: data });
   };
   const incQtyHandler = (item) => {
-    console.log(item.qty, "item");
+    // console.log(item.qty, "item");
 
     dispatch({ type: "INC_QTY", payload: item });
   };
   const decQtyHandler = (item) => {
-    console.log(item.qty, "item");
+    // console.log(item.qty, "item");
     dispatch({ type: "DEC_QTY", payload: item });
   };
 

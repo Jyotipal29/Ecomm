@@ -20,6 +20,7 @@ const ProductDetails = () => {
     productState: { product },
     productDispatch,
   } = useProduct();
+  // console.log(product, "product");
   const navigate = useNavigate();
   const id = location.pathname.split("/")[2];
 
@@ -36,7 +37,7 @@ const ProductDetails = () => {
     };
     getProduct();
   }, [id]);
-  console.log(product, "product");
+  // console.log(product, "product");
   const cartHandler = async (product) => {
     try {
       if (isAuth) {
@@ -52,7 +53,7 @@ const ProductDetails = () => {
               product: product._id,
               price: product.price,
               imageUrl: product.imageUrl,
-              name: product.name,
+              brand: product.brand,
               qty: product.qty,
             },
           },
@@ -60,7 +61,7 @@ const ProductDetails = () => {
         );
         dispatch({ type: "ADD_CART", payload: data });
 
-        console.log(data, "data");
+        // console.log(data, "data");
       } else {
         navigate("/login");
       }
@@ -70,6 +71,7 @@ const ProductDetails = () => {
   };
 
   const wishHandler = async (product) => {
+    console.log(product, "products in wish");
     if (isAuth) {
       const config = {
         headers: {
@@ -89,8 +91,9 @@ const ProductDetails = () => {
         },
         config
       );
+      // console.log(data, "whis data in data");
       dispatch({ type: "ADD_WISHLIST", payload: data });
-      console.log(data, "data");
+      // console.log(data, "data");
     } else {
       navigate("/login");
     }
@@ -109,7 +112,7 @@ const ProductDetails = () => {
           <div className="single-product-card">
             <img src={product.imageUrl} className="single-product-img" />
             <div className="single-product-info">
-              <h4 className="single-product-name">{product.name}</h4>
+              <h4 className="single-product-name">{product.brand}</h4>
               <p className="single-product-desc">{product.description}</p>
               <p className="single-product-price">Rs.{product.price}</p>
 

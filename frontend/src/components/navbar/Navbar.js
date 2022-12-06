@@ -65,7 +65,7 @@ const Navbar = ({ cat }) => {
 
               <li onClick={handleLogout}>
                 <LogoutOutlinedIcon />
-                <small>{user.username.charAt(0)}</small>
+                <small>{user.username}</small>
               </li>
             </>
           ) : (

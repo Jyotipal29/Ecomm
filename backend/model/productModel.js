@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    brand: {
       type: String,
       required: true,
     },
@@ -30,11 +30,11 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    size: {
-      type: [String],
+
+    fastDelivery: {
+      type: Boolean,
       required: true,
     },
-    fastDelivery: Boolean,
   },
   {
     timestamps: true,

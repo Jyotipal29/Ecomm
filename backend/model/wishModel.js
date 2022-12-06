@@ -25,6 +25,14 @@ const wishSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      InStock: {
+        type: Number,
+        // required: true,
+      },
+      brand: {
+        type: "String",
+        required: true,
+      },
     },
   ],
 });

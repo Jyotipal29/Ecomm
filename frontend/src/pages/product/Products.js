@@ -19,7 +19,7 @@ const Products = ({ item }) => {
     dispatch,
   } = useCart();
   const handleCart = async (item) => {
-    console.log(item._id, "item");
+    // console.log(item._id, "item");
     try {
       if (isAuth) {
         const config = {
@@ -34,7 +34,7 @@ const Products = ({ item }) => {
               product: item._id,
               price: item.price,
               imageUrl: item.imageUrl,
-              name: item.name,
+              name: item.brand,
               qty: item.qty,
             },
           },
@@ -67,14 +67,14 @@ const Products = ({ item }) => {
             product: item._id,
             price: item.price,
             imageUrl: item.imageUrl,
-            name: item.name,
+            name: item.brand,
             qty: item.qty,
           },
         },
         config
       );
       dispatch({ type: "ADD_WISHLIST", payload: data });
-      console.log(data, "data");
+      // console.log(data, "data");
     } else {
       navigate("/login");
     }
@@ -89,7 +89,7 @@ const Products = ({ item }) => {
           <FavoriteBorderOutlinedIcon />
         </div>
 
-        <h3 className="product-brand">{item.name}</h3>
+        <h3 className="product-brand">{item.brand}</h3>
         <h6 className="product-price"> Rs.{item.price}</h6>
 
         <button className="cart-btn" onClick={() => handleCart(item)}>

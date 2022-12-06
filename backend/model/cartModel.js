@@ -28,11 +28,8 @@ const cartSchema = new mongoose.Schema({
         type: Number,
         // required: true,
       },
-      fastDelivery: {
-        type: Boolean,
-        // required: true,
-      },
-      name: {
+
+      brand: {
         type: "String",
         required: true,
       },

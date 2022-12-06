@@ -46,6 +46,7 @@ const Wish = () => {
 
     dispatch({ type: "REMOVE_FROM_WISHLIST", payload: data });
   };
+  // console.log(wish, "wish");
   return (
     <div className="wish-container">
       {wish &&
@@ -58,8 +59,8 @@ const Wish = () => {
             >
               x
             </div>
-            <h3 className="product-brand">{item.name}</h3>
-            <p className="product-name">Dress for women</p>
+            <h3 className="product-brand">{item.brand}</h3>
+            {/* <p className="product-name">Dress for women</p> */}
             <h6 className="product-price">{item.price}</h6>
 
             <button className="cart-btn">move to cart</button>
