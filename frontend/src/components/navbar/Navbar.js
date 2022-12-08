@@ -20,6 +20,7 @@ const Navbar = ({ cat }) => {
   const navigate = useNavigate();
   const {
     state: { user, wish, cart },
+    token,
     dispatch,
   } = useCart();
   const handleLogout = (e) => {
@@ -45,12 +46,10 @@ const Navbar = ({ cat }) => {
           {/* <Link to="/" style={{ color: "inherit" }}>
             <li>Home</li>
           </Link> */}
-
           <Link to="/products" style={{ color: "inherit" }}>
             <li> Products</li>
           </Link>
-
-          {user ? (
+          {user && user.length > 0 ? (
             <>
               <Link to="/cart" style={{ color: "inherit" }}>
                 <li>
