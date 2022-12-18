@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./auth.css";
+import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -7,10 +8,11 @@ import { api } from "../../constants/api";
 import { useCart } from "../../context/cart/cartContext";
 
 const Login = () => {
-  const { dispatch, isAuth, setIsAuth, token, setToken, error, setError } =
-    useCart();
+  const { dispatch, isAuth, setIsAuth, token, setToken } = useCart();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
@@ -28,15 +30,25 @@ const Login = () => {
       localStorage.setItem("isAuth", true);
       setIsAuth(true);
       console.log(isAuth);
+      toast.success("logged in successfuly");
+
       navigate("/");
     } catch (error) {
-      setError(error);
+      setError(error.response.data.message);
+
+      setTimeout(() => {
+        setError("");
+      }, 5000);
+      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
   return (
     <div className="auth-container">
       <div className="auth-wrapper">
         <h2 className="auth-heading">Log IN</h2>
+        {error && <div className="auth-error">{error}</div>}
+
         <form className="auth-form">
           <div className="auth-form-control">
             <small>Email</small>
@@ -68,6 +80,7 @@ const Login = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

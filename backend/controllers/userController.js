@@ -15,18 +15,16 @@ const updateUser = asyncHandler(async (req, res) => {
     );
     res.status(200).json(updatedUser);
   } else {
-    res.status(403);
-    throw new Error("you can only update ur  account");
+    res.status(403).json({ message: "you can only update ur  account" });
   }
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
   if (req.params.id === req.user.id) {
     await User.findByIdAndDelete(req.params.id);
-    res.status(200).json("user has been deleted");
+    res.status(200).json({ message: "user has been deleted" });
   } else {
-    res.status(403);
-    throw new Error("you can only delete ur  account");
+    res.status(403).json({ message: "you can only delete ur  account" });
   }
 });
 
@@ -35,8 +33,7 @@ const getUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(200).json(user);
   } else {
-    res.status(404);
-    throw new Error("user not there");
+    res.status(404).json({ message: "user not there" });
   }
 });
 
@@ -45,8 +42,7 @@ const getAllUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(200).json(user);
   } else {
-    res.status(404);
-    throw new Error("user not there");
+    res.status(404).json({ message: "user not there" });
   }
 });
 

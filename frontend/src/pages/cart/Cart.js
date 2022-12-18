@@ -78,7 +78,7 @@ const Cart = () => {
                 <div className="cart-info">
                   <img src={item.imageUrl} />
                   <div className="cart-product-details">
-                    <p>{item.name}</p>
+                    <h3>{item.brand}</h3>
                     <small>{item.price}</small>
                     <br />
                     <a onClick={() => removeHandler(item.product)}>remove</a>
@@ -95,22 +95,30 @@ const Cart = () => {
             </tr>
           ))}
       </table>
-      <div className="cart-total-price">
-        <table>
-          <tr>
-            <td>Subtotal</td>
-            <td>{total}</td>
-          </tr>
-          <tr>
-            <td>Tax</td>
-            <td>30</td>
-          </tr>
-          <tr>
-            <td>total</td>
-            <td>{total + 30}</td>
-          </tr>
-        </table>
-      </div>
+      {cart.length > 0 && (
+        <div className="cart-total-price">
+          <table>
+            <tr>
+              <td>Subtotal</td>
+              <td>{total}</td>
+            </tr>
+            <tr>
+              <td>Tax</td>
+              <td>30</td>
+            </tr>
+            <tr>
+              <td>total</td>
+              <td>{total + 30}</td>
+            </tr>
+            {/* <button
+              className="check-out-btn"
+              onClick={() => navigate("/address")}
+            >
+              checkout
+            </button> */}
+          </table>
+        </div>
+      )}
     </div>
   );
 };

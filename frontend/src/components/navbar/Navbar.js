@@ -49,7 +49,7 @@ const Navbar = ({ cat }) => {
           <Link to="/products" style={{ color: "inherit" }}>
             <li> Products</li>
           </Link>
-          {user && user.length > 0 ? (
+          {user ? (
             <>
               <Link to="/cart" style={{ color: "inherit" }}>
                 <li>

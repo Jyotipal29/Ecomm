@@ -6,7 +6,7 @@ const getWish = expressAsyncHandler(async (req, res) => {
   if (wishs) {
     res.status(201).json({ wishs });
   } else {
-    res.status(401).json({ error: "wish does not exixts" });
+    res.status(401).json({ message: "wish does not exixts" });
   }
 });
 
@@ -30,7 +30,7 @@ const addToWish = expressAsyncHandler(async (req, res) => {
             },
           }
         ).exec((error, _wish) => {
-          if (error) return res.status(400).json({ error });
+          if (error) return res.status(400).json({ message: error.message });
           if (_wish) {
             return res.status(201).json({ wish: _wish });
           }
@@ -44,7 +44,7 @@ const addToWish = expressAsyncHandler(async (req, res) => {
             },
           }
         ).exec((error, _wish) => {
-          if (error) return res.status(400).json({ error });
+          if (error) return res.status(400).json({ message: error.message });
           if (_wish) {
             return res.status(201).json({ wish: _wish });
           }
@@ -59,7 +59,7 @@ const addToWish = expressAsyncHandler(async (req, res) => {
         wishItems: req.body.wishItems,
       });
       wish.save((error, wish) => {
-        if (error) return res.status(400).json({ error });
+        if (error) return res.status(400).json({ message: error.message });
         if (wish) {
           return res.status(201).json({ wish });
         }
@@ -82,7 +82,7 @@ const removeFromWish = expressAsyncHandler(async (req, res) => {
         },
       }
     ).exec((error, result) => {
-      if (error) return res.status(400).json({ error });
+      if (error) return res.status(400).json({ message: error.message });
       if (result) {
         res.status(202).json({ product: id });
       }

@@ -14,3 +14,9 @@
     font-size: 30px;
     color:#3b82f6;
 }
+.wish-texts{
+    padding: 0px 20px;
+}
+.cart-btn{
+    cursor: pointer;
+}

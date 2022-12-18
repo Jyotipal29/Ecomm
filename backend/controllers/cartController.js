@@ -2,12 +2,15 @@ const expressAsyncHandler = require("express-async-handler");
 const Cart = require("../model/cartModel");
 
 const getCart = expressAsyncHandler(async (req, res) => {
-  const carts = await Cart.find({ user: req.user._id });
-  if (carts) {
-    res.status(201).json({ carts });
-  } else {
-    res.status(401).json({ error: "cart not there" });
+  try {
+    const carts = await Cart.find({ user: req.user._id });
+    if (carts) {
+      res.status(201).json({ carts });
+    }
+  } catch (error) {
+    res.status(401).json({ message: "cart not there" });
   }
+  
 });
 
 const addToCart = expressAsyncHandler(async (req, res) => {

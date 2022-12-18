@@ -26,10 +26,10 @@ const Wish = () => {
       };
 
       const { data } = await axios.get(`${api}/wish/`, config);
-      console.log(data, "data");
+      console.log(data, "data 29");
       const dataM = data.wishs[0].wishItems;
+      // const dataM = data.carts[0].cartItems;
 
-      console.log(dataM, "wishdata");
       dispatch({ type: "GET_WISHLIST", payload: dataM });
     };
     fetchVideo();
@@ -47,6 +47,42 @@ const Wish = () => {
     dispatch({ type: "REMOVE_FROM_WISHLIST", payload: data });
   };
   // console.log(wish, "wish");
+  const addToCart = async ({
+    product,
+    brand,
+    imageUrl,
+    price,
+    qty,
+    InStock,
+  }) => {
+    try {
+      if (isAuth) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await axios.post(
+          `${api}/carts/add`,
+          {
+            cartItems: {
+              product: product,
+              price: price,
+              imageUrl: imageUrl,
+              brand: brand,
+              InStock: InStock,
+              qty: qty,
+            },
+          },
+          config
+        );
+        dispatch({ type: "ADD_CART", payload: data });
+      }
+    } catch (error) {
+      setError(error);
+    }
+  };
+
   return (
     <div className="wish-container">
       {wish &&
@@ -59,11 +95,14 @@ const Wish = () => {
             >
               x
             </div>
-            <h3 className="product-brand">{item.brand}</h3>
-            {/* <p className="product-name">Dress for women</p> */}
-            <h6 className="product-price">{item.price}</h6>
+            <div className="wish-texts">
+              <p className="product-brand">{item.brand}</p>
+              <p className="product-price">{item.price}</p>
+            </div>
 
-            <button className="cart-btn">move to cart</button>
+            <button className="cart-btn" onClick={() => addToCart(item)}>
+              move to cart
+            </button>
           </div>
         ))}
     </div>

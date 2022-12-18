@@ -55,8 +55,22 @@ td p{
     width:100%;
     max-width: 400px;
 }
+th:last-child{
+    text-align: right;
+}
 td:last-child{
     text-align: right;
+}
+.check-out-btn{
+    display: block;
+    width:150%;
+    padding: 8px 0px;
+    background-color: #3b82f6;
+    border:none;
+    outline: none;
+    color:white;
+    font-size: 18px;
+    margin: 5px;
 }
 
 

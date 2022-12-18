@@ -15,8 +15,8 @@ import Wish from "./pages/wishlist/Wish";
 import Home from "./pages/Home";
 import ProductDetails from "./pages/productDetails/ProductDetails";
 import PageNotFound from "./pages/PageNotFound";
-import Address from "./pages/Address";
-import Order from "./pages/Order";
+import Address from "./pages/address/Address";
+import Order from "./pages/order/Order";
 import Profile from "./pages/Profile";
 import Navbar from "./components/navbar/Navbar";
 import PrivateRoutes from "./utils/PrivateRoutes";
@@ -32,8 +32,8 @@ function App() {
             <Route exact path="/products/:id" element={<ProductDetails />} />
             <Route exact path="/cart" element={<Cart />} />
             <Route exact path="/wishlist" element={<Wish />} />
-            <Route exact path="/address" element={<Address />} />
-            <Route exact path="/order" element={<Order />} />
+            {/* <Route exact path="/address" element={<Address />} /> */}
+            {/* <Route exact path="/order" element={<Order />} /> */}
 
             {/* <Route exact path="/profile" element={<Profile />} /> */}
           </Route>

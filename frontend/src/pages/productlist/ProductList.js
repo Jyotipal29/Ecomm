@@ -5,14 +5,15 @@ import { useProduct } from "../../context/product/productContext";
 import axios from "axios";
 import { api } from "../../constants/api";
 import { useCart } from "../../context/cart/cartContext";
-
+import { categories } from "../../data";
 const ProductList = () => {
   const {
-    productState: { products, sort, byFastDelivery, searchQuery },
+    productState: { products, sort, byBrand, searchQuery },
     productDispatch,
   } = useProduct();
   const { error, setError } = useCart();
-  console.log(products, "products");
+  console.log(byBrand, "by brand");
+
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -32,12 +33,17 @@ const ProductList = () => {
       );
     }
 
-    if (byFastDelivery) {
-      sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
+    if (byBrand) {
+      sortedProducts = sortedProducts.filter((prod) =>
+        prod.brand.includes(byBrand)
+      );
     }
+    // if (byFastDelivery) {
+    //   sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
+    // }
     if (searchQuery) {
       sortedProducts = sortedProducts.filter((prod) =>
-        prod.name.toLowerCase().includes(searchQuery)
+        prod.description.toLowerCase().includes(searchQuery)
       );
     }
 
@@ -62,39 +68,42 @@ const ProductList = () => {
           </div>
         </div>
         <div className="prod-filter-row">
-          <select
-            className="prod-filter-select"
-            onChange={(e) =>
-              productDispatch({
-                type: "SORT_BY_PRICE",
-                payload: e.target.value,
-              })
-            }
-          >
-            <option disabled selected>
-              Sort
-            </option>
-            <option value="highToLow">High to low</option>
-            <option value="lowToHigh">low to high</option>
-          </select>
-          <select className="prod-filter-select">
-            <option disabled selected>
-              filter
-            </option>
-            <option value="FILTER_BY_DELIVERY">Fast delivery</option>
-            <option value="FILTER_BY_STOCK">In stock</option>
-          </select>
-
-          {/* <button
-            class="btn-clear"
-            onClick={() =>
-              productDispatch({
-                type: "CLEAR_FILTERS",
-              })
-            }
-          >
-            clear
-          </button> */}
+          <div>
+            <label className="filter-label">Sort:</label>
+            <select
+              className="prod-filter-select"
+              onChange={(e) =>
+                productDispatch({
+                  type: "SORT_BY_PRICE",
+                  payload: e.target.value,
+                })
+              }
+            >
+              <option disabled selected>
+                Price
+              </option>
+              <option value="highToLow">High to low</option>
+              <option value="lowToHigh">low to high</option>
+            </select>
+          </div>
+          <div>
+            <label className="filter-label">Filter:</label>
+            <select
+              className="prod-filter-select"
+              onClick={(e) => {
+                console.log(e.target.value);
+                productDispatch({
+                  type: "FILTER_BY_BRAND",
+                  payload: e.target.value,
+                });
+              }}
+            >
+              <option value="">All</option>
+              {categories?.map((item) => (
+                <option value={item.cat}>{item.cat}</option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="product-row">
           {transformProducts() &&

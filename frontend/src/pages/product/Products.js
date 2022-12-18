@@ -34,8 +34,9 @@ const Products = ({ item }) => {
               product: item._id,
               price: item.price,
               imageUrl: item.imageUrl,
-              name: item.brand,
+              brand: item.brand,
               qty: item.qty,
+              InStock: item.InStock,
             },
           },
           config
@@ -67,7 +68,8 @@ const Products = ({ item }) => {
             product: item._id,
             price: item.price,
             imageUrl: item.imageUrl,
-            name: item.brand,
+            brand: item.brand,
+            InStock: item.InStock,
             qty: item.qty,
           },
         },
@@ -88,9 +90,12 @@ const Products = ({ item }) => {
         <div className="product-wish" onClick={() => handleWish(item)}>
           <FavoriteBorderOutlinedIcon />
         </div>
+        <div className="product-texts">
+          <p className="product-brand">{item.brand}</p>
 
-        <h3 className="product-brand">{item.brand}</h3>
-        <h6 className="product-price"> Rs.{item.price}</h6>
+          <p className="product-desc">{item.description}</p>
+          <p className="product-price"> Rs.{item.price}</p>
+        </div>
 
         <button className="cart-btn" onClick={() => handleCart(item)}>
           Add to cart

@@ -54,6 +54,7 @@ const ProductDetails = () => {
               price: product.price,
               imageUrl: product.imageUrl,
               brand: product.brand,
+              InStock: product.InStock,
               qty: product.qty,
             },
           },
@@ -85,7 +86,9 @@ const ProductDetails = () => {
             product: product._id,
             price: product.price,
             imageUrl: product.imageUrl,
-            name: product.name,
+            InStock: product.InStock,
+
+            brand: product.brand,
             qty: product.qty,
           },
         },
@@ -112,7 +115,7 @@ const ProductDetails = () => {
           <div className="single-product-card">
             <img src={product.imageUrl} className="single-product-img" />
             <div className="single-product-info">
-              <h4 className="single-product-name">{product.brand}</h4>
+              <p className="single-product-name">{product.brand}</p>
               <p className="single-product-desc">{product.description}</p>
               <p className="single-product-price">Rs.{product.price}</p>
 

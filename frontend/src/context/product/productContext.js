@@ -19,9 +19,8 @@ export const ProductProvider = ({ children }) => {
   const [productState, productDispatch] = useReducer(ProductReducer, {
     products: [],
     product: [],
-    byStock: false,
-    byFastDelivery: false,
     searchQuery: "",
+    byBrand: " ",
   });
   return (
     <productContext.Provider value={{ productState, productDispatch }}>

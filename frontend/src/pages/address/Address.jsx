@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 // import { useAuth } from "../context/auth/authContext";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/cart/cartContext";
+import { useCart } from "../../context/cart/cartContext";
 
 const reducer = (state, action) => {
   switch (action.type) {

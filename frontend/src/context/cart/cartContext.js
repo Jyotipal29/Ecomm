@@ -13,7 +13,7 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(CartReducer, {
-    user: JSON.parse(localStorage.getItem("user") || null) || [],
+    user: JSON.parse(localStorage.getItem("user") || null),
     shippingAddress:
       JSON.parse(localStorage.getItem("shippingAddress") || null) || [],
     wish: [],

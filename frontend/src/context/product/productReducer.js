@@ -8,6 +8,12 @@ const ProductReducer = (productState, action) => {
       return {
         product: action.payload,
       };
+    case "FILTER_BY_BRAND":
+      console.log(productState.byBrand, "byBrand");
+      return {
+        ...productState,
+        byBrand: action.payload,
+      };
     case "SORT_BY_PRICE":
       return { ...productState, sort: action.payload };
 

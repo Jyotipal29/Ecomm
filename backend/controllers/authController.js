@@ -4,70 +4,17 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
 
 const asyncHandler = require("express-async-handler");
-
-// const register = asyncHandler(async (req, res) => {
-//   const { username, email, password } = req.body;
-//   //hash password
-//   const salt = await bcrypt.genSalt(10);
-//   const hashedPassword = await bcrypt.hash(password, salt);
-
-// const newUser = new User({
-//   username,
-//   email,
-//   password: hashedPassword,
-// });
-
-// const accessToken = jwt.sign(
-//   {
-//     id: newUser._id,
-//   },
-//   process.env.JWT_SEC,
-//   { expiresIn: "30d" }
-// );
-// try {
-//   const savedUser = await newUser.save();
-//   res.status(201).json({ savedUser, accessToken });
-// } catch (err) {
-//   res.status(500).json(err);
-// }
-// });
-
-// const login = asyncHandler(async (req, res) => {
-//   const { username, password } = req.body;
-//   const user = await User.findOne({ username });
-
-//   const accessToken = jwt.sign(
-//     {
-//       id: user._id,
-//     },
-//     process.env.JWT_SEC,
-//     { expiresIn: "30d" }
-//   );
-
-//   if (user && (await bcrypt.compare(password, user.password))) {
-//     res.json({ user, accessToken });
-//   } else {
-//     res.status(400);
-//     throw new Error("invalid users");
-//   }
-// });
-
-
-
+//register
 const register = asyncHandler(async (req, res) => {
-  //   const { name, email, password } = req.body;
-  //   res.json({ message: `hey  ${name} with ${email} and ${password}` });
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    res.status(400);
-    throw new Error("please add all fields");
+    res.status(400).json({message: "please add all fields"});
   }
 
   //check if user exist
   const userExists = await User.findOne({ username });
   if (userExists) {
-    res.status(400);
-    throw new Error("User already exist");
+    res.status(400).json({message:"User already exixt"})
   }
 
   //hash password
@@ -89,8 +36,7 @@ const register = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("invalid error");
+    res.status(400).json({message:"invalid user"})
   }
 });
 
@@ -108,8 +54,7 @@ const login = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("invalid users");
+    res.status(400).json({ message: "Unauthorized access" });
   }
 });
 // const getMe = asyncHandler(async (req, res) => {

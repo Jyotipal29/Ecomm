@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./auth.css";
 import { Link } from "react-router-dom";
 import { api } from "../../constants/api";
@@ -8,17 +10,13 @@ import { useNavigate } from "react-router";
 import { useCart } from "../../context/cart/cartContext";
 
 const Register = () => {
-  const { dispatch, isAuth, setIsAuth, error, setError } = useCart();
+  const { dispatch, isAuth, setIsAuth } = useCart();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [formError, setFormError] = useState("");
-  const navigate = useNavigate();
+  const [error, setError] = useState(" ");
 
-  const validate = (values) => {
-    const errors = {};
-    const regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
-  };
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -37,12 +35,21 @@ const Register = () => {
         localStorage.setItem("token", token);
 
         setIsAuth("true");
+        toast.success("registred successfuly");
+        navigate("/");
       }
     } catch (error) {
-      setError(error);
-    }
+      let errorMessage =
+        error?.response?.data?.message || "Something went wrong";
 
-    navigate("/");
+      console.log(errorMessage, "error");
+      toast.error(errorMessage);
+
+      setError(errorMessage);
+      setTimeout(() => {
+        setError("");
+      }, 5000);
+    }
   };
   return (
     <div className="auth-container">
@@ -93,6 +100,7 @@ const Register = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
