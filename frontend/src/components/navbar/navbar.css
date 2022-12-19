@@ -11,11 +11,11 @@ position: fixed;
 top:0;
 right:0;
 left:0;
-z-index: 1300;
-max-width: 1300px;
+z-index:999999;
 margin:0 auto;
-
-
+width:100%;
+background-color:#3b82f6;
+box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
 }
 .nav-nav{
    
@@ -24,12 +24,11 @@ margin:0 auto;
     justify-content: space-between;
 align-items: center;
 
-width:100%;
 padding-right:30px;
 
 }
 .nav-logo{
-color:#3b82f6;
+color:white;
 font-size: 35px;
 font-weight: bold;
 font-style: italic;
@@ -50,21 +49,32 @@ align-items: center;
 font-family:'Poppins';
 font-size: 20px;
 cursor: pointer;
+position: relative;
+color:white;
 }
+.nav-nav .nav-pills li small{
+   position:absolute;
+   color:white;
+  top:-7px;
+  right:-5px;
+
+
+}
+
 .menu{
     display: none;
 }
 
 @media (max-width:720px){
     .nav-container{
-        margin-right:30px;
+        width:100%;
     }
     .nav-nav .nav-pills{
         display: none;
     }
     .nav-nav .nav-pills-mobile{
         position: absolute;
-        top:70px;
+        top:40px;
         left:0;
         display: block;
         background-color:#3b82f6 ;

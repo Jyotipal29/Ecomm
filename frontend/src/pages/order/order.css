@@ -1,26 +1,79 @@
 .order-container{
-    max-width: 500px;
+    max-width: 700px;
     margin: 100px auto;
 }
 .order-address-container{
-    border: 1px solid black;
     padding: 10px 20px;
 }
 .order-heading{
-    /* text-align: center; */
+    font-size: 25px;
 }
 .order-name{
-    font-size: 20px;
-    font-weight: bold;
+    font-size:16px;
+    text-transform: uppercase;
 }
 .order-address{
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
 
 }
 
 .order-products-container{
-    border:1px solid black;
     margin: 10px 0px;
-    padding:0px 10px;
+    padding:0px 15px;
+}
+.or-pr-con{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.or-pr-img{
+    width:100px;
+    height: 100px;
+}
+
+.or-pr{
+    display: flex;
+}
+.or-it{
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.or-sum{
+    display: flex;
+    justify-content: space-between;
+}
+.total{
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.total-price{
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.or-sum-btn{
+    display: block;
+    width:100%;
+    margin: 10px;
+    padding: 10px ;
+    font-size: 20px;
+    background-color:#3b82f6;
+    color:white;
+    text-transform: uppercase;
+    border:none;
+    outline: none;
+    cursor: pointer;
+}
+
+@media  (max-width:600px) {
+    .order-container{
+        max-width: 400px;
+    }
+    .or-sum-btn{
+        width:95%;
+        margin:10px;
+    }
 }

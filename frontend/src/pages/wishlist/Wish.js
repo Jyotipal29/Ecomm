@@ -97,7 +97,8 @@ const Wish = () => {
             </div>
             <div className="wish-texts">
               <p className="product-brand">{item.brand}</p>
-              <p className="product-price">{item.price}</p>
+              <p className="product-price">{item.description}</p>
+              <p className="product-price">Rs.{item.price}</p>
             </div>
 
             <button className="cart-btn" onClick={() => addToCart(item)}>

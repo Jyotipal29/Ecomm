@@ -1,10 +1,8 @@
 import React, { useReducer } from "react";
-import { useEffect } from "react";
 import { useState } from "react";
-// import { useAuth } from "../context/auth/authContext";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/cart/cartContext";
-
+import "./address.css";
 const reducer = (state, action) => {
   switch (action.type) {
     case "CREATE_REQ":
@@ -71,113 +69,61 @@ const Address = () => {
     navigate("/order");
   };
   return (
-    <div
-      style={{
-        backgroundColor: "#eee",
-        maxWidth: "600px",
-        margin: "auto",
-        textAlign: "center",
-        height: "60vh",
-      }}
-    >
-      <h1> Shipping Address</h1>
-      <form
-        onSubmit={submitHandler}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
-        <input
-          style={{
-            padding: "10px",
-            margin: "0px 20px",
-          }}
-          type="text"
-          placeholder="full name"
-          value={fullName}
-          required
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <input
-          style={{
-            padding: "10px",
-            margin: "0px 20px",
-          }}
-          type="text"
-          placeholder="Address"
-          value={address}
-          required
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <input
-          style={{
-            padding: "10px",
-            margin: "0px 20px",
-          }}
-          type="text"
-          placeholder="City"
-          value={city}
-          required
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <input
-          style={{
-            padding: "10px",
-            margin: "0px 20px",
-          }}
-          type="text"
-          placeholder="Postal Code"
-          value={postalCode}
-          required
-          onChange={(e) => setPostalCode(e.target.value)}
-        />
-        <input
-          style={{
-            padding: "10px",
-            margin: "0px 20px",
-          }}
-          type="text"
-          placeholder="Country"
-          value={country}
-          required
-          onChange={(e) => setCountry(e.target.value)}
-        />
-        <span
-          style={{
-            backgroundColor: "blue",
-            margin: "0px 20px",
-            backgroundColor: "blue",
-            color: "white",
-            fontSize: "20px",
-            display: "flex",
-            gap: "20px",
-          }}
-        >
-          <input
-            type="radio"
-            value={paymentMethodName}
-            label="PayPal"
-            checked={paymentMethodName === "PayPal"}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <label>Paypal</label>
-        </span>
+    <div className="address-container">
+      <div className="address-wrapper">
+        <h2 className="address-heading"> Shipping Address</h2>
+        <form onSubmit={submitHandler} className="address-form">
+          <div className="address-form-control">
+            <input
+              type="text"
+              placeholder="full name"
+              value={fullName}
+              required
+              onChange={(e) => setFullName(e.target.value)}
+            />
+          </div>
+          <div className="address-form-control">
+            <input
+              type="text"
+              placeholder="Address"
+              value={address}
+              required
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+          <div className="address-form-control">
+            <input
+              type="text"
+              placeholder="City"
+              value={city}
+              required
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </div>
+          <div className="address-form-control">
+            <input
+              type="text"
+              placeholder="Postal Code"
+              value={postalCode}
+              required
+              onChange={(e) => setPostalCode(e.target.value)}
+            />
+          </div>
+          <div className="address-form-control">
+            <input
+              type="text"
+              placeholder="Country"
+              value={country}
+              required
+              onChange={(e) => setCountry(e.target.value)}
+            />
+          </div>
 
-        <button
-          style={{
-            // padding: "10px",
-            margin: "0px 20px",
-            backgroundColor: "black",
-            color: "white",
-            fontSize: "30px",
-          }}
-          type="submit"
-        >
-          Continue
-        </button>
-      </form>
+          <button className="address-btn" type="submit">
+            Continue
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

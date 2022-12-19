@@ -54,17 +54,19 @@ const Navbar = ({ cat }) => {
               <Link to="/cart" style={{ color: "inherit" }}>
                 <li>
                   <ShoppingCartIcon />
+                  <small>{cart?.length}</small>
                 </li>
               </Link>
               <Link to="/wishlist" style={{ color: "inherit" }}>
                 <li>
                   <FavoriteBorderOutlinedIcon />
+                  <small>{wish?.length}</small>
                 </li>
               </Link>
 
               <li onClick={handleLogout}>
                 <LogoutOutlinedIcon />
-                <small>{user.username}</small>
+                <label>{user.username}</label>
               </li>
             </>
           ) : (

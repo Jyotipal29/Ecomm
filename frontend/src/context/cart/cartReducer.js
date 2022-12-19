@@ -98,12 +98,3 @@ const CartReducer = (state, action) => {
   }
 };
 export default CartReducer;
-// state.cart.map((c) =>
-          // c.id === action.payload._id ? { ...c, qty: c.qty + 1 } : c
-        // ),
-
-
-
-        // state.cart.map((c) =>
-          // c.id === action.payload._id ? { ...c, qty: c.qty - 1 } : c
-        // ),

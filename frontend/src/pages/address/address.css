@@ -1,0 +1,50 @@
+.address-container{
+    max-width: 500px;
+    margin: 150px auto;
+}
+.address-wrapper{
+    /* border:1px solid black; */
+    display: flex;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+}
+.address-form{
+    width:100%;
+}
+.address-form-control{
+padding: 10px 40px;
+}
+.address-form-control input{
+width:100%;
+padding:10px 0px;
+outline: none;
+display: block;
+font-size: 16px;
+}
+
+.address-btn{
+    display: block;
+    width:85%;
+    margin:10px 40px;
+    padding:10px 0px;
+        
+    background-color:#3b82f6; 
+    border:none;
+    outline: none;
+    color:white;
+    font-size: 20px;
+    cursor: pointer;
+}
+@media  (max-width:600px) {
+    .address-container{
+    max-width: 350px;
+    
+}
+
+.address-btn{
+    width:80%;
+}
+}

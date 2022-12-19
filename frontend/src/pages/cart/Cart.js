@@ -87,9 +87,19 @@ const Cart = () => {
               </td>
 
               <td>
-                <button onClick={() => incQtyHandler(item)}>+</button>
+                <button
+                  disabled={item.qty >= item.InStock}
+                  onClick={() => incQtyHandler(item)}
+                >
+                  +
+                </button>
                 <small>{item.qty}</small>
-                <button onClick={() => decQtyHandler(item)}>-</button>
+                <button
+                  disabled={item.qty === 1}
+                  onClick={() => decQtyHandler(item)}
+                >
+                  -
+                </button>
               </td>
               <td>{item.price * item.qty}</td>
             </tr>
@@ -110,12 +120,12 @@ const Cart = () => {
               <td>total</td>
               <td>{total + 30}</td>
             </tr>
-            {/* <button
+            <button
               className="check-out-btn"
               onClick={() => navigate("/address")}
             >
               checkout
-            </button> */}
+            </button>
           </table>
         </div>
       )}
