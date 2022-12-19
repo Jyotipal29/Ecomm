@@ -9,7 +9,6 @@ const userRouter = require("./routes/userRoutes");
 const productRouter = require("./routes/productRouter");
 const cartRouter = require("./routes/cartRouter");
 const wishRouter = require("./routes/wishRouter");
-const orderRouter = require("./routes/orderRouter");
 
 connectDB();
 
@@ -24,7 +23,6 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/wish", wishRouter);
-app.use("/api/orders", orderRouter);
 
 app.use(errorHandler);
 
