@@ -13,7 +13,7 @@ const Order = () => {
   const navigate = useNavigate();
 
   const {
-    state: { shippingAddress, cart },
+    state: { shippingAddress, cart, user },
     dispatch,
   } = useCart();
   useEffect(() => {
@@ -26,7 +26,14 @@ const Order = () => {
     );
   }, [cart]);
 
-  const orderHandler = () => {
+  const orderHandler = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.delete(`${api}/carts/`, config);
+    console.log(data, "delte data");
     dispatch({ type: "ORDER_DONE" });
     toast.success("keep shoping");
 

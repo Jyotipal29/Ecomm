@@ -13,6 +13,29 @@ const getCart = expressAsyncHandler(async (req, res) => {
   
 });
 
+// delete cart 
+const deleteCart = expressAsyncHandler(async (req, res) => {
+  try {
+    const carts = await Cart.findOne({ user: req.user._id });
+    if (!carts) {
+      res.status(404).json({ message:"no cart found" });
+    }
+    await carts.delete()
+    res.status(200).json({ message: "cart deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+)
+
+   
+
+
+
+
+
+
 const addToCart = expressAsyncHandler(async (req, res) => {
   Cart.findOne({ user: req.user._id }).exec((error, cart) => {
     if (error) return res.status(400).json({ error });
@@ -97,4 +120,5 @@ module.exports = {
   addToCart,
   removeFromCart,
   getCart,
+  deleteCart
 };
