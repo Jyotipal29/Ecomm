@@ -8,7 +8,7 @@ const Cart = () => {
   const [movedToWish, setMovedToWish] = useState(false);
   const navigate = useNavigate();
   const {
-    state: { cart, wish },
+    state: { cart, wish, user },
     dispatch,
     isAuth,
     setIsAuth,
@@ -23,7 +23,7 @@ const Cart = () => {
     const fetchData = async () => {
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.get(`${api}/carts/`, config);
@@ -44,7 +44,7 @@ const Cart = () => {
   const removeHandler = async (id) => {
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
     const { data } = await axios.delete(`${api}/carts/${id}`, config);

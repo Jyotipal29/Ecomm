@@ -62,7 +62,7 @@ const addToCart = expressAsyncHandler(async (req, res) => {
         cartItems: req.body.cartItems,
       });
       cart.save((error, cart) => {
-        if (error) return res.status(400).json({ error });
+        if (error) return res.status(400).json({ message: error.message });
         if (cart) {
           return res.status(201).json({ cart });
         }
@@ -85,7 +85,7 @@ const removeFromCart = expressAsyncHandler(async (req, res) => {
         },
       }
     ).exec((error, result) => {
-      if (error) return res.status(400).json({ error });
+      if (error) return res.status(400).json({ message: error.message });
       if (result) {
         res.status(202).json({ product: id });
       }

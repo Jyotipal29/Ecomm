@@ -14,7 +14,7 @@ const ProductDetails = () => {
     token,
     error,
     setError,
-    state: { cart, wish },
+    state: { cart, wish, user },
   } = useCart();
   const {
     productState: { product },
@@ -43,7 +43,7 @@ const ProductDetails = () => {
       if (isAuth) {
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${user.token}`,
           },
         };
         const { data } = await axios.post(
@@ -76,7 +76,7 @@ const ProductDetails = () => {
     if (isAuth) {
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.post(

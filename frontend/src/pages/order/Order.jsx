@@ -9,44 +9,25 @@ import { useNavigate } from "react-router";
 
 const Order = () => {
   const [total, setTotal] = useState();
-  const [cartData, setCartData] = useState([]);
   const navigate = useNavigate();
+
   const {
-    state: { shippingAddress },
+    state: { shippingAddress, cart },
     dispatch,
-    isAuth,
-    setIsAuth,
-    error,
-    setError,
-    token,
   } = useCart();
-
   useEffect(() => {
-    const fetchData = async () => {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.get(`${api}/carts/`, config);
-      // console.log(data, "data");
-      const dataM = data.carts[0].cartItems;
-      console.log(dataM);
-      setCartData(dataM);
-      // dispatch({ type: "GET_CART", payload: dataM });
-    };
-    fetchData();
-  }, []);
+    console.log(shippingAddress);
+  }, [cart]);
 
-  console.log(shippingAddress, "shippingAdde");
   useEffect(() => {
     setTotal(
-      cartData.reduce((acc, curr) => acc + Number(curr.price) * curr.qty, 0)
+      cart.reduce((acc, curr) => acc + Number(curr.price) * curr.qty, 0)
     );
-  }, [cartData]);
+  }, [cart]);
 
   const orderHandler = () => {
     dispatch({ type: "ORDER_DONE" });
+    localStorage.removeItem("shippingAddress");
     navigate("/products");
   };
   return (
@@ -69,7 +50,7 @@ const Order = () => {
       <div className="order-products-container">
         <h2 className="order-heading">Order Items</h2>
         <div>
-          {cartData?.map((item) => (
+          {cart?.map((item) => (
             <div className="or-pr-con">
               <div className="or-pr">
                 <img src={item.imageUrl} className="or-pr-img" />

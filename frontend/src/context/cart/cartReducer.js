@@ -47,10 +47,8 @@ const CartReducer = (state, action) => {
     case "SAVE_ADDRESS":
       return {
         ...state,
-        shippingAddress: {
-          ...state.shippingAddress,
-          shippingAddress: action.payload,
-        },
+
+        shippingAddress: action.payload,
       };
     case "ORDER_DONE":
       return {

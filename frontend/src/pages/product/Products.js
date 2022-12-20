@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router";
 const Products = ({ item }) => {
   const navigate = useNavigate();
   const {
-    state: { cart, wish },
+    state: { cart, wish, user },
     isAuth,
     token,
     error,
@@ -21,65 +21,56 @@ const Products = ({ item }) => {
   const handleCart = async (item) => {
     // console.log(item._id, "item");
     try {
-      if (isAuth) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const { data } = await axios.post(
-          `${api}/carts/add`,
-          {
-            cartItems: {
-              product: item._id,
-              price: item.price,
-              imageUrl: item.imageUrl,
-              brand: item.brand,
-              qty: item.qty,
-              InStock: item.InStock,
-            },
-          },
-          config
-        );
-        dispatch({ type: "ADD_CART", payload: data });
-        toast.success("registered successfully!");
-
-        console.log(data, "data");
-      } else {
-        navigate("/login");
-        toast.error("error accured");
-      }
-    } catch (error) {
-      setError(error);
-      toast.error("error accured");
-    }
-  };
-  const handleWish = async (item) => {
-    if (isAuth) {
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.post(
-        `${api}/wish/add`,
+        `${api}/carts/add`,
         {
-          wishItems: {
+          cartItems: {
             product: item._id,
             price: item.price,
             imageUrl: item.imageUrl,
             brand: item.brand,
-            InStock: item.InStock,
             qty: item.qty,
+            InStock: item.InStock,
           },
         },
         config
       );
-      dispatch({ type: "ADD_WISHLIST", payload: data });
-      // console.log(data, "data");
-    } else {
-      navigate("/login");
+      dispatch({ type: "ADD_CART", payload: data });
+      toast.success("registered successfully!");
+
+      console.log(data, "data");
+    } catch (error) {
+      setError(error.response.data.message);
+      toast.error(error.response.data.message);
     }
+  };
+  const handleWish = async (item) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.post(
+      `${api}/wish/add`,
+      {
+        wishItems: {
+          product: item._id,
+          price: item.price,
+          imageUrl: item.imageUrl,
+          brand: item.brand,
+          InStock: item.InStock,
+          qty: item.qty,
+        },
+      },
+      config
+    );
+    dispatch({ type: "ADD_WISHLIST", payload: data });
+    // console.log(data, "data");
   };
   return (
     <div className="product-container">

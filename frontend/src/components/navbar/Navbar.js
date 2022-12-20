@@ -5,22 +5,16 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
-// import { useAuth } from "../../context/auth/authContext";
-// import { logoutCall } from "../../context/apiCalls";
-import { CartProvider, useCart } from "../../context/cart/cartContext";
-// import { useWish } from "../../context/wishlist/wishContext";
+import { useCart } from "../../context/cart/cartContext";
 import { useProduct } from "../../context/product/productContext";
 
 const Navbar = ({ cat }) => {
   const [openMenu, setOpenMenu] = useState(false);
-  const { productState, productDispatch } = useProduct();
   const navigate = useNavigate();
   const {
     state: { user, wish, cart },
-    token,
     dispatch,
   } = useCart();
   const handleLogout = (e) => {
@@ -31,9 +25,8 @@ const Navbar = ({ cat }) => {
     dispatch({ type: "LOGOUT" });
     navigate("/login");
   };
-  // const style = {
-  //   maxHeight: openMenu ? "300px" : "0px",
-  // };
+  console.log(wish, cart, "wish and cart");
+
   return (
     <div className="nav-container">
       <div className="nav-nav">
@@ -43,9 +36,6 @@ const Navbar = ({ cat }) => {
           </Link>
         </div>
         <ul className={openMenu ? "nav-pills-mobile" : "nav-pills"}>
-          {/* <Link to="/" style={{ color: "inherit" }}>
-            <li>Home</li>
-          </Link> */}
           <Link to="/products" style={{ color: "inherit" }}>
             <li> Products</li>
           </Link>
