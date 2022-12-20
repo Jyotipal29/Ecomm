@@ -6,7 +6,8 @@ import { Navigate } from "react-router";
 import "./order.css";
 import { useCart } from "../../context/cart/cartContext";
 import { useNavigate } from "react-router";
-
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 const Order = () => {
   const [total, setTotal] = useState();
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ const Order = () => {
 
   const orderHandler = () => {
     dispatch({ type: "ORDER_DONE" });
+    toast.success("keep shoping");
+
     localStorage.removeItem("shippingAddress");
     navigate("/products");
   };
@@ -77,6 +80,7 @@ const Order = () => {
       <button className="or-sum-btn" onClick={orderHandler}>
         Order
       </button>
+      <ToastContainer />
     </div>
   );
 };

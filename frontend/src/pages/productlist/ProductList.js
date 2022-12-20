@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Products from "../product/Products";
 import "./list.css";
 import { useProduct } from "../../context/product/productContext";
@@ -6,7 +6,11 @@ import axios from "axios";
 import { api } from "../../constants/api";
 import { useCart } from "../../context/cart/cartContext";
 import { categories } from "../../data";
+import FadeLoader from "react-spinners/FadeLoader";
+
 const ProductList = () => {
+  const [loading, setLoading] = useState(false);
+
   const {
     productState: { products, sort, byBrand, searchQuery },
     productDispatch,
@@ -16,9 +20,11 @@ const ProductList = () => {
 
   useEffect(() => {
     const getProducts = async () => {
+      setLoading(true);
       try {
         const { data } = await axios.get(`${api}/products`);
         productDispatch({ type: "GET_PRODUCTS", payload: data });
+        setLoading(false);
       } catch (error) {
         setError(error);
       }
@@ -38,9 +44,7 @@ const ProductList = () => {
         prod.brand.includes(byBrand)
       );
     }
-    // if (byFastDelivery) {
-    //   sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
-    // }
+
     if (searchQuery) {
       sortedProducts = sortedProducts.filter((prod) =>
         prod.description.toLowerCase().includes(searchQuery)
@@ -106,10 +110,22 @@ const ProductList = () => {
           </div>
         </div>
         <div className="product-row">
-          {transformProducts() &&
+          {loading ? (
+            <div className="loader">
+              <FadeLoader
+                color="#3b82f6"
+                height={50}
+                margin={50}
+                width={2}
+                loading={loading}
+              />
+            </div>
+          ) : (
+            transformProducts() &&
             transformProducts().map((item) => {
               return <Products item={item} key={item._id} />;
-            })}
+            })
+          )}
         </div>
       </div>
     </div>

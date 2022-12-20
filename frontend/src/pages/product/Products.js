@@ -1,5 +1,7 @@
 import React from "react";
 import "./product.css";
+import "react-toastify/dist/ReactToastify.css";
+
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -41,7 +43,7 @@ const Products = ({ item }) => {
         config
       );
       dispatch({ type: "ADD_CART", payload: data });
-      toast.success("registered successfully!");
+      toast.success("added to cart!");
 
       console.log(data, "data");
     } catch (error) {
@@ -50,26 +52,32 @@ const Products = ({ item }) => {
     }
   };
   const handleWish = async (item) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    const { data } = await axios.post(
-      `${api}/wish/add`,
-      {
-        wishItems: {
-          product: item._id,
-          price: item.price,
-          imageUrl: item.imageUrl,
-          brand: item.brand,
-          InStock: item.InStock,
-          qty: item.qty,
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
         },
-      },
-      config
-    );
-    dispatch({ type: "ADD_WISHLIST", payload: data });
+      };
+      const { data } = await axios.post(
+        `${api}/wish/add`,
+        {
+          wishItems: {
+            product: item._id,
+            price: item.price,
+            imageUrl: item.imageUrl,
+            brand: item.brand,
+            InStock: item.InStock,
+            qty: item.qty,
+          },
+        },
+        config
+      );
+      dispatch({ type: "ADD_WISHLIST", payload: data });
+      toast.success("added to wishlist");
+    } catch (error) {
+      toast.error("something went wrong");
+    }
+
     // console.log(data, "data");
   };
   return (
@@ -92,6 +100,7 @@ const Products = ({ item }) => {
           Add to cart
         </button>
       </div>
+      <ToastContainer />
     </div>
   );
 };

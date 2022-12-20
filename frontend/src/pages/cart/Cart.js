@@ -4,7 +4,12 @@ import { useCart } from "../../context/cart/cartContext";
 import axios from "axios";
 import { api } from "../../constants/api";
 import "./cart.css";
+import FadeLoader from "react-spinners/FadeLoader";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 const Cart = () => {
+  const [loading, setLoading] = useState(false);
+
   const [movedToWish, setMovedToWish] = useState(false);
   const navigate = useNavigate();
   const {
@@ -21,6 +26,8 @@ const Cart = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -31,6 +38,7 @@ const Cart = () => {
       const dataM = data.carts[0].cartItems;
       console.log(dataM);
       dispatch({ type: "GET_CART", payload: dataM });
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -51,6 +59,7 @@ const Cart = () => {
     console.log(data, "data");
 
     dispatch({ type: "REMOVE_FROM_CART", payload: data });
+    toast.success("removed");
   };
   const incQtyHandler = (item) => {
     // console.log(item.qty, "item");
@@ -64,71 +73,89 @@ const Cart = () => {
 
   return (
     <div className="cart-container">
-      <table>
-        <tr>
-          <th>Product</th>
-          <th>Qty</th>
-          <th>Subtottal</th>
-        </tr>
-
-        {cart &&
-          cart.map((item) => (
-            <tr>
-              <td>
-                <div className="cart-info">
-                  <img src={item.imageUrl} />
-                  <div className="cart-product-details">
-                    <h3>{item.brand}</h3>
-                    <small>{item.price}</small>
-                    <br />
-                    <a onClick={() => removeHandler(item.product)}>remove</a>
-                  </div>
-                </div>
-              </td>
-
-              <td>
-                <button
-                  disabled={item.qty >= item.InStock}
-                  onClick={() => incQtyHandler(item)}
-                >
-                  +
-                </button>
-                <small>{item.qty}</small>
-                <button
-                  disabled={item.qty === 1}
-                  onClick={() => decQtyHandler(item)}
-                >
-                  -
-                </button>
-              </td>
-              <td>{item.price * item.qty}</td>
-            </tr>
-          ))}
-      </table>
-      {cart.length > 0 && (
-        <div className="cart-total-price">
+      {loading ? (
+        <div className="loader">
+          <FadeLoader
+            color="#3b82f6"
+            height={50}
+            margin={50}
+            width={2}
+            loading={loading}
+            speedMultiplier={0.5}
+          />
+        </div>
+      ) : (
+        <>
           <table>
             <tr>
-              <td>Subtotal</td>
-              <td>{total}</td>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Subtottal</th>
             </tr>
-            <tr>
-              <td>Tax</td>
-              <td>30</td>
-            </tr>
-            <tr>
-              <td>total</td>
-              <td>{total + 30}</td>
-            </tr>
-            <button
-              className="check-out-btn"
-              onClick={() => navigate("/address")}
-            >
-              checkout
-            </button>
+
+            {cart &&
+              cart.map((item) => (
+                <tr>
+                  <td>
+                    <div className="cart-info">
+                      <img src={item.imageUrl} />
+                      <div className="cart-product-details">
+                        <h3>{item.brand}</h3>
+                        <small>{item.price}</small>
+                        <br />
+                        <a onClick={() => removeHandler(item.product)}>
+                          remove
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <button
+                      disabled={item.qty >= item.InStock}
+                      onClick={() => incQtyHandler(item)}
+                    >
+                      +
+                    </button>
+                    <small>{item.qty}</small>
+                    <button
+                      disabled={item.qty === 1}
+                      onClick={() => decQtyHandler(item)}
+                    >
+                      -
+                    </button>
+                  </td>
+                  <td>{item.price * item.qty}</td>
+                </tr>
+              ))}
           </table>
-        </div>
+          {cart.length > 0 && (
+            <div className="cart-total-price">
+              <table>
+                <tr>
+                  <td>Subtotal</td>
+                  <td>{total}</td>
+                </tr>
+                <tr>
+                  <td>Tax</td>
+                  <td>30</td>
+                </tr>
+                <tr>
+                  <td>total</td>
+                  <td>{total + 30}</td>
+                </tr>
+                <button
+                  className="check-out-btn"
+                  onClick={() => navigate("/address")}
+                >
+                  checkout
+                </button>
+              </table>
+            </div>
+          )}
+        </>
       )}
+      <ToastContainer />
     </div>
   );
 };

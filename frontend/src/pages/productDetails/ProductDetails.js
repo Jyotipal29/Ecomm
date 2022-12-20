@@ -1,12 +1,18 @@
 import React from "react";
 import "./Product.css";
-import { useEffect } from "react";
+import FadeLoader from "react-spinners/FadeLoader";
+import "react-toastify/dist/ReactToastify.css";
+
+import { toast, ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useProduct } from "../../context/product/productContext";
 import { useCart } from "../../context/cart/cartContext";
 import { api } from "../../constants/api";
 import { useLocation, useNavigate } from "react-router";
 const ProductDetails = () => {
+  const [loading, setLoading] = useState(false);
+
   const location = useLocation();
   const {
     dispatch,
@@ -26,11 +32,13 @@ const ProductDetails = () => {
 
   useEffect(() => {
     const getProduct = async () => {
+      setLoading(true);
+
       try {
         const { data } = await axios.get(`${api}/products/find/${id}`);
         // console.log("159", data);
         productDispatch({ type: "GET_SINGLE_PRODUCT", payload: data });
-        localStorage.setItem("product", JSON.stringify(product));
+        setLoading(false);
       } catch (error) {
         setError(error);
       }
@@ -61,6 +69,7 @@ const ProductDetails = () => {
           config
         );
         dispatch({ type: "ADD_CART", payload: data });
+        toast.success("added to cart");
 
         // console.log(data, "data");
       } else {
@@ -96,6 +105,7 @@ const ProductDetails = () => {
       );
       // console.log(data, "whis data in data");
       dispatch({ type: "ADD_WISHLIST", payload: data });
+      toast.success("added to wishlist");
       // console.log(data, "data");
     } else {
       navigate("/login");
@@ -110,33 +120,46 @@ const ProductDetails = () => {
 
   return (
     <div className="single-product-container">
-      {product && (
-        <>
-          <div className="single-product-card">
-            <img src={product.imageUrl} className="single-product-img" />
-            <div className="single-product-info">
-              <p className="single-product-name">{product.brand}</p>
-              <p className="single-product-desc">{product.description}</p>
-              <p className="single-product-price">Rs.{product.price}</p>
+      {loading ? (
+        <div className="loader">
+          <FadeLoader
+            color="#3b82f6"
+            height={50}
+            margin={50}
+            width={2}
+            loading={loading}
+          />
+        </div>
+      ) : (
+        product && (
+          <>
+            <div className="single-product-card">
+              <img src={product.imageUrl} className="single-product-img" />
+              <div className="single-product-info">
+                <p className="single-product-name">{product.brand}</p>
+                <p className="single-product-desc">{product.description}</p>
+                <p className="single-product-price">Rs.{product.price}</p>
 
-              <div className="single-product-btn">
-                <button
-                  className="pr-cart-btn"
-                  onClick={() => cartHandler(product)}
-                >
-                  Add to cart
-                </button>
-                <button
-                  className="pr-wish-btn"
-                  onClick={() => wishHandler(product)}
-                >
-                  Add to wishlist
-                </button>
+                <div className="single-product-btn">
+                  <button
+                    className="pr-cart-btn"
+                    onClick={() => cartHandler(product)}
+                  >
+                    Add to cart
+                  </button>
+                  <button
+                    className="pr-wish-btn"
+                    onClick={() => wishHandler(product)}
+                  >
+                    Add to wishlist
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </>
+          </>
+        )
       )}
+      <ToastContainer />
     </div>
   );
 };

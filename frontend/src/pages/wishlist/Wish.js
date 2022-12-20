@@ -5,8 +5,12 @@ import axios from "axios";
 import { api } from "../../constants/api";
 import { useCart } from "../../context/cart/cartContext";
 import { useEffect, useState } from "react";
-
+import FadeLoader from "react-spinners/FadeLoader";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 const Wish = () => {
+  const [loading, setLoading] = useState(false);
+
   const [moveToCart, setMovedToCart] = useState(false);
   const {
     state: { cart, wish, user },
@@ -19,6 +23,8 @@ const Wish = () => {
 
   useEffect(() => {
     const fetchVideo = async () => {
+      setLoading(true);
+
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -31,6 +37,7 @@ const Wish = () => {
       // const dataM = data.carts[0].cartItems;
 
       dispatch({ type: "GET_WISHLIST", payload: dataM });
+      setLoading(false);
     };
     fetchVideo();
   }, []);
@@ -45,6 +52,7 @@ const Wish = () => {
     console.log(data, "data");
 
     dispatch({ type: "REMOVE_FROM_WISHLIST", payload: data });
+    toast.success("removed");
   };
   // console.log(wish, "wish");
   const addToCart = async ({
@@ -77,6 +85,7 @@ const Wish = () => {
           config
         );
         dispatch({ type: "ADD_CART", payload: data });
+        toast.success("added to cart");
       }
     } catch (error) {
       setError(error);
@@ -85,27 +94,42 @@ const Wish = () => {
 
   return (
     <div className="wish-container">
-      {wish &&
-        wish.map((item) => (
-          <div className="product-card">
-            <img src={item.imageUrl} className="product-img" />
-            <div
-              className="remove-wish"
-              onClick={() => removeHandler(item.product)}
-            >
-              x
-            </div>
-            <div className="wish-texts">
-              <p className="product-brand">{item.brand}</p>
-              <p className="product-price">{item.description}</p>
-              <p className="product-price">Rs.{item.price}</p>
-            </div>
+      {loading ? (
+        <div className="loader">
+          <FadeLoader
+            color="#3b82f6"
+            height={50}
+            margin={50}
+            width={2}
+            loading={loading}
+          />
+        </div>
+      ) : (
+        <>
+          {wish &&
+            wish.map((item) => (
+              <div className="product-card">
+                <img src={item.imageUrl} className="product-img" />
+                <div
+                  className="remove-wish"
+                  onClick={() => removeHandler(item.product)}
+                >
+                  x
+                </div>
+                <div className="wish-texts">
+                  <p className="product-brand">{item.brand}</p>
+                  <p className="product-price">{item.description}</p>
+                  <p className="product-price">Rs.{item.price}</p>
+                </div>
 
-            <button className="cart-btn" onClick={() => addToCart(item)}>
-              move to cart
-            </button>
-          </div>
-        ))}
+                <button className="cart-btn" onClick={() => addToCart(item)}>
+                  move to cart
+                </button>
+              </div>
+            ))}
+        </>
+      )}
+      <ToastContainer />
     </div>
   );
 };

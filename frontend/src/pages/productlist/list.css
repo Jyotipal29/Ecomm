@@ -49,6 +49,14 @@ border:none;
     grid-template-columns: repeat(4,1fr);
     
 }
+.loader{
+    width:100%;
+    position:absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
 
 @media screen and (max-width:1200px) {
     .product-row{
