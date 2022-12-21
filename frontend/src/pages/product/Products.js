@@ -5,31 +5,25 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import axios from "axios";
-import { api } from "../../constants/api";
 import { useCart } from "../../context/cart/cartContext";
-import { useLocation, useNavigate } from "react-router";
+import api from "../../utils/api";
 
 const Products = ({ item }) => {
-  const navigate = useNavigate();
   const {
-    state: { cart, wish, user },
-    isAuth,
-    token,
-    error,
+    state: { user },
+
     setError,
     dispatch,
   } = useCart();
   const handleCart = async (item) => {
-    // console.log(item._id, "item");
     try {
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(
-        `${api}/carts/add`,
+      const { data } = await api.post(
+        `/carts/add`,
         {
           cartItems: {
             product: item._id,
@@ -58,8 +52,8 @@ const Products = ({ item }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(
-        `${api}/wish/add`,
+      const { data } = await api.post(
+        `/wish/add`,
         {
           wishItems: {
             product: item._id,

@@ -2,13 +2,12 @@ import React from "react";
 import "./Product.css";
 import FadeLoader from "react-spinners/FadeLoader";
 import "react-toastify/dist/ReactToastify.css";
+import api from "../../utils/api";
 
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useProduct } from "../../context/product/productContext";
 import { useCart } from "../../context/cart/cartContext";
-import { api } from "../../constants/api";
 import { useLocation, useNavigate } from "react-router";
 const ProductDetails = () => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +34,7 @@ const ProductDetails = () => {
       setLoading(true);
 
       try {
-        const { data } = await axios.get(`${api}/products/find/${id}`);
+        const { data } = await api.get(`/products/find/${id}`);
         // console.log("159", data);
         productDispatch({ type: "GET_SINGLE_PRODUCT", payload: data });
         setLoading(false);
@@ -54,8 +53,8 @@ const ProductDetails = () => {
             Authorization: `Bearer ${user.token}`,
           },
         };
-        const { data } = await axios.post(
-          `${api}/carts/add`,
+        const { data } = await api.post(
+          `/carts/add`,
           {
             cartItems: {
               product: product._id,
@@ -88,7 +87,7 @@ const ProductDetails = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(
+      const { data } = await api.post(
         `${api}/wish/add`,
         {
           wishItems: {
@@ -110,12 +109,6 @@ const ProductDetails = () => {
     } else {
       navigate("/login");
     }
-  };
-  const plusHandler = (product) => {
-    console.log(product, "product");
-  };
-  const minusHandler = (product) => {
-    console.log(product, "product");
   };
 
   return (

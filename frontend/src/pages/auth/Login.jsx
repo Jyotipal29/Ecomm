@@ -4,11 +4,11 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { api } from "../../constants/api";
 import { useCart } from "../../context/cart/cartContext";
+import api from "../../utils/api";
 
 const Login = () => {
-  const { dispatch, isAuth, setIsAuth, token, setToken } = useCart();
+  const { dispatch, isAuth, setIsAuth } = useCart();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,7 +18,7 @@ const Login = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(`${api}/auth/login`, {
+      const { data } = await api.post(`/auth/login`, {
         email,
         password,
       });

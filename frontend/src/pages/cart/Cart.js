@@ -1,45 +1,26 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useCart } from "../../context/cart/cartContext";
-import axios from "axios";
-import { api } from "../../constants/api";
 import "./cart.css";
 import FadeLoader from "react-spinners/FadeLoader";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-const Cart = () => {
-  const [loading, setLoading] = useState(false);
+import api from "../../utils/api";
+import { useCart as useCartHook } from "../../hooks/cart";
 
-  const [movedToWish, setMovedToWish] = useState(false);
-  const navigate = useNavigate();
+const Cart = () => {
   const {
-    state: { cart, wish, user },
+    state: { cart, user },
     dispatch,
-    isAuth,
-    setIsAuth,
-    error,
-    setError,
-    token,
   } = useCart();
+  const { loading, fetchData } = useCartHook(dispatch);
+
+  const navigate = useNavigate();
+
   // console.log(cart, "cart");
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.get(`${api}/carts/`, config);
-      // console.log(data, "data");
-      const dataM = data.carts[0].cartItems;
-      console.log(dataM);
-      dispatch({ type: "GET_CART", payload: dataM });
-      setLoading(false);
-    };
     fetchData();
   }, []);
   useEffect(() => {
@@ -50,12 +31,7 @@ const Cart = () => {
     }
   }, [cart]);
   const removeHandler = async (id) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    const { data } = await axios.delete(`${api}/carts/${id}`, config);
+    const { data } = await api.delete(`/carts/${id}`);
     console.log(data, "data");
 
     dispatch({ type: "REMOVE_FROM_CART", payload: data });
@@ -98,7 +74,7 @@ const Cart = () => {
                 <tr>
                   <td>
                     <div className="cart-info">
-                      <img src={item.imageUrl} />
+                      <img src={item.imageUrl} alt="" />
                       <div className="cart-product-details">
                         <h3>{item.brand}</h3>
                         <small>{item.price}</small>

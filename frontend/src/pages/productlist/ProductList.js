@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Products from "../product/Products";
 import "./list.css";
+import api from "../../utils/api";
+
 import { useProduct } from "../../context/product/productContext";
-import axios from "axios";
-import { api } from "../../constants/api";
 import { useCart } from "../../context/cart/cartContext";
 import { categories } from "../../data";
 import FadeLoader from "react-spinners/FadeLoader";
@@ -15,14 +15,14 @@ const ProductList = () => {
     productState: { products, sort, byBrand, searchQuery },
     productDispatch,
   } = useProduct();
-  const { error, setError } = useCart();
+  const { setError } = useCart();
   console.log(byBrand, "by brand");
 
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(`${api}/products`);
+        const { data } = await api.get(`/products`);
         productDispatch({ type: "GET_PRODUCTS", payload: data });
         setLoading(false);
       } catch (error) {

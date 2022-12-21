@@ -1,60 +1,33 @@
 import React from "react";
-import Product from "../product/Products";
 import "./wish.css";
-import axios from "axios";
-import { api } from "../../constants/api";
+import api from "../../utils/api";
+
 import { useCart } from "../../context/cart/cartContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import FadeLoader from "react-spinners/FadeLoader";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-const Wish = () => {
-  const [loading, setLoading] = useState(false);
+import { useWishList } from "../../hooks/wish";
 
-  const [moveToCart, setMovedToCart] = useState(false);
+const Wish = () => {
   const {
-    state: { cart, wish, user },
+    state: { wish, user },
     dispatch,
-    token,
     isAuth,
-    error,
     setError,
   } = useCart();
+  const { loading, fetchData } = useWishList(dispatch);
 
   useEffect(() => {
-    const fetchVideo = async () => {
-      setLoading(true);
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const { data } = await axios.get(`${api}/wish/`, config);
-      console.log(data, "data 29");
-      const dataM = data.wishs[0].wishItems;
-      // const dataM = data.carts[0].cartItems;
-
-      dispatch({ type: "GET_WISHLIST", payload: dataM });
-      setLoading(false);
-    };
-    fetchVideo();
+    fetchData();
   }, []);
   const removeHandler = async (id) => {
-    console.log(id, "wish");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    const { data } = await axios.delete(`${api}/wish/${id}`, config);
+    const { data } = await api.delete(`/wish/${id}`);
     console.log(data, "data");
 
     dispatch({ type: "REMOVE_FROM_WISHLIST", payload: data });
     toast.success("removed");
   };
-  // console.log(wish, "wish");
   const addToCart = async ({
     product,
     brand,
@@ -67,11 +40,11 @@ const Wish = () => {
       if (isAuth) {
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${user.token}`,
           },
         };
-        const { data } = await axios.post(
-          `${api}/carts/add`,
+        const { data } = await api.post(
+          `/carts/add`,
           {
             cartItems: {
               product: product,

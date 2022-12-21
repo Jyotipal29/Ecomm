@@ -1,13 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { api } from "../../constants/api";
-import { Navigate } from "react-router";
 import "./order.css";
 import { useCart } from "../../context/cart/cartContext";
 import { useNavigate } from "react-router";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
+import api from "../../utils/api";
+
 const Order = () => {
   const [total, setTotal] = useState();
   const navigate = useNavigate();
@@ -27,12 +27,7 @@ const Order = () => {
   }, [cart]);
 
   const orderHandler = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    const { data } = await axios.delete(`${api}/carts/`, config);
+    const { data } = await api.delete(`/carts/`);
     console.log(data, "delte data");
     dispatch({ type: "ORDER_DONE" });
     toast.success("keep shoping");

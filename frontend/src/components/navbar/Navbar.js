@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
@@ -8,11 +8,12 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
 import { useCart } from "../../context/cart/cartContext";
-import { useProduct } from "../../context/product/productContext";
-
+import { useCart as useCartHook } from "../../hooks/cart";
+import { useWishList } from "../../hooks/wish";
 const Navbar = ({ cat }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
+
   const {
     state: { user, wish, cart },
     dispatch,
@@ -26,6 +27,12 @@ const Navbar = ({ cat }) => {
     navigate("/login");
   };
   console.log(wish, cart, "wish and cart");
+  const { fetchData: fetchCart } = useCartHook(dispatch);
+  const { fetchData: fetchWishList } = useWishList(dispatch);
+  useEffect(() => {
+    fetchCart();
+    fetchWishList();
+  }, []);
 
   return (
     <div className="nav-container">

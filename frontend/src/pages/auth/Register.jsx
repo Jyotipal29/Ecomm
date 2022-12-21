@@ -1,13 +1,12 @@
-import styled from "styled-components";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./auth.css";
 import { Link } from "react-router-dom";
-import { api } from "../../constants/api";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useCart } from "../../context/cart/cartContext";
+import api from "../../utils/api";
 
 const Register = () => {
   const { dispatch, isAuth, setIsAuth } = useCart();
@@ -21,7 +20,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(`${api}/auth/register`, {
+      const { data } = await axios.post(`/auth/register`, {
         username,
         email,
         password,

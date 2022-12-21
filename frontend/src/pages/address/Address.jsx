@@ -1,9 +1,7 @@
-import React, { useReducer } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/cart/cartContext";
 import "./address.css";
-
 
 const Address = () => {
   const {
