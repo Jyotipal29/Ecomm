@@ -88,7 +88,7 @@ const ProductDetails = () => {
         },
       };
       const { data } = await api.post(
-        `${api}/wish/add`,
+        `/wish/add`,
         {
           wishItems: {
             product: product._id,
