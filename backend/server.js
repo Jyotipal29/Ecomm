@@ -27,7 +27,7 @@ app.use("/api/wish", wishRouter);
 app.use(errorHandler);
 
 
-const port = process.env.PORT || 3005;
+const port = process.env.PORT || 3002;
 
 app.listen(port, () => {
   console.log(`listening on ${port}`);

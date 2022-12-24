@@ -27,6 +27,13 @@ align-items: center;
 padding-right:30px;
 
 }
+.nav-user{
+display: flex;
+align-items: center;
+}
+.nav-user-name{
+    text-transform: uppercase;
+}
 .nav-logo{
 color:white;
 font-size: 35px;
